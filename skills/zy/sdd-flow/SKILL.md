@@ -14,15 +14,15 @@ idea → grill → prd → [Gate 0] → spec → [Gate A] → tdd(per spec) → 
                  ↑ redo              ↑ redo
 ```
 
-**Invocation contract.** Every stage uses model-invoked skills, so this orchestrator chains the whole pipeline automatically: grilling = `/grilling` + `/domain-modeling`; then `/to-prd`, `/to-spec`, `/tdd`, `/codemap`. `/triage` and `/handoff` are user-invoked; this skill only reads triage's state or suggests the user run handoff, never invokes them.
+**Invocation contract.** Every stage uses model-invoked skills, so this orchestrator chains the whole pipeline automatically: grilling = `/grilling` + `/domain-modeling`; then `/to-prd`, `/to-spec`, `/tdd`, `/codemap`. `/handoff` is model-invoked too — at wrap-up this skill invokes it to write the handoff file and emit the next-session starter prompt. `/triage` remains user-invoked; this skill only reads its state, never invokes it.
 
 ## How specs get vetted
 
-Spec quality is owned by `/to-spec`, not this orchestrator. `/to-spec` runs two adversarial best-of-N loops with a fresh-context judge — one on the **decomposition** (how the PRD is cut into specs) and one on each **complex spec's design** — and it lands every spec skeleton on disk *before* designing it. So when Stage 3 returns, the specs are already self-reviewed and on disk under `.scratch/<feature>/specs/`, `ready-for-agent`. This skill just invokes `/to-spec` and then runs Gate A on the landed files. See `/to-spec` for the loop mechanics.
+Spec quality is owned by `/to-spec`, not this orchestrator. `/to-spec` runs two adversarial best-of-N loops with a fresh-context judge — one on the **decomposition** (how the PRD is cut into specs) and one on each **complex spec's design** — and it lands every spec skeleton on disk *before* designing it. So when Stage 3 returns, the specs are already self-reviewed and on disk in the issue tracker, `ready-for-agent`. This skill just invokes `/to-spec` and then runs Gate A on the landed files. See `/to-spec` for the loop mechanics.
 
 ## Human gates — review the file, not the chat
 
-Every human gate (Gate 0, Gate A) fires **after** its stage has already published the artifact to the issue tracker — the PRD / specs are on disk as real files under `.scratch/<feature>/specs/` before the gate runs. So at a gate:
+Every human gate (Gate 0, Gate A) fires **after** its stage has already published the artifact to the issue tracker — the PRD / specs are on disk as real files in the issue tracker before the gate runs. So at a gate:
 
 - **Don't re-paste or summarize the artifact in chat.** Chat coordinates; it doesn't re-host content that already lives in a file.
 - **Point the user at the file(s).** Give the exact path(s) — the PRD file for Gate 0, the spec files in dependency order for Gate A. The user reviews the actual landed file in their editor; that file is the ground truth the next stage consumes, not a chat rendering of it.
@@ -45,7 +45,7 @@ Synthesize the PRD from the grilled context (no interview — `/to-prd` forbids 
 
 ### Gate 0 — human reviews the PRD
 
-The PRD is already on disk (Stage 2 published it under `.scratch/<feature>/specs/`). Point the user at that file and have them review it directly — don't re-paste it in chat (see *Human gates* above). Ask exactly: **"PRD looks good → break into specs? Or redo the PRD?"**
+The PRD is already on disk (Stage 2 published it to the issue tracker). Point the user at that file and have them review it directly — don't re-paste it in chat (see *Human gates* above). Ask exactly: **"PRD looks good → break into specs? Or redo the PRD?"**
 
 - **Redo** → back to Stage 2, feeding the user's feedback into the next draft.
 - **Approve** → Stage 3.
@@ -54,11 +54,11 @@ Do not start specs until the human approves.
 
 ### 3. Specs — `/to-spec`
 
-Decompose the approved PRD into planning-complete specs (each one = one `/tdd` session) via `/to-spec`. `/to-spec` self-vets the decomposition and each complex spec's design through best-of-N, lands every skeleton, then designs each one — so when it returns, the specs are on disk under `.scratch/<feature>/specs/`, fully designed, `ready-for-agent`.
+Decompose the approved PRD into planning-complete specs (each one = one `/tdd` session) via `/to-spec`. `/to-spec` self-vets the decomposition and each complex spec's design through best-of-N, lands every skeleton, then designs each one — so when it returns, the specs are on disk in the issue tracker, fully designed, `ready-for-agent`.
 
 ### Gate A — human reviews the spec breakdown
 
-The specs are already on disk (Stage 3 published them in dependency order under `.scratch/<feature>/specs/`). Point the user at those files and have them review them directly — don't re-paste the breakdown in chat (see *Human gates* above). Ask: **"Specs look right → start building? Or redo the breakdown?"**
+The specs are already on disk (Stage 3 published them in dependency order to the issue tracker). Point the user at those files and have them review them directly — don't re-paste the breakdown in chat (see *Human gates* above). Ask: **"Specs look right → start building? Or redo the breakdown?"**
 
 - **Redo** → back to Stage 3 with the user's feedback.
 - **Approve** → Stage 4.
@@ -86,7 +86,7 @@ Before declaring done:
 - [ ] Offer ADRs for any hard-to-reverse, surprising, real-trade-off decisions made along the way (the `/grill-with-docs` bar — sparingly).
 - [ ] If code terrain shifted materially, run `/codemap` **drift-check** against the relevant `docs/codemap/` map — if it reports drift, update the affected map (skip if `/codemap` isn't loaded).
 - [ ] Write a one-paragraph summary of what shipped, with pointers to the PRD / specs / PR — not a re-narration.
-- [ ] If work continues in another session, suggest the user run `/handoff`.
+- [ ] If work continues in another session, invoke `/handoff` (it writes the handoff file and emits the next-session starter prompt).
 
 ## When NOT to use this skill
 

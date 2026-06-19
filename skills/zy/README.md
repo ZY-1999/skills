@@ -34,7 +34,7 @@
 - 一个 `spec` 带有指向其来源 `prd`/`bug` 的 `Parent:` 引用（来源是一次原始 grilled 对话时省略）。
 - 对于没有现成 `prd` 的 grilled 对话，`/to-spec` 会内联合成设计并直接产出 `spec` —— 不需要 `prd` 产物。
 
-issues 以本地 markdown 形式存于 `.scratch/<YYYY-MM-DD>-<feature-slug>/specs/<NN>-<slug>.md`，每个以 `Type:`（`spec | prd | bug`）开头。见 [issue-tracker-local.md](./setup-skills/references/issue-tracker-local.md)。
+issues 以本地 markdown 形式存于 `.scratch/<YYYY-MM-DD>-<feature-slug>/` 下，每个以 `Type:`（`spec | prd | bug`）开头。只有 `spec` 放进 `specs/` 子目录；`prd`/`bug` 作为父项放在与 `specs/` 同级的 feature 根目录。见 [issue-tracker-local.md](./setup-skills/references/issue-tracker-local.md)。
 
 ## 注册
 
@@ -53,4 +53,6 @@ issues 以本地 markdown 形式存于 `.scratch/<YYYY-MM-DD>-<feature-slug>/spe
 - **[to-spec](./to-spec/SKILL.md)** —— 把一个 PRD、一个 bug、或当前（已 grilled 的）对话拆成 `spec` —— 原子的、**规划完备**的单元，agent 在一次 `/tdd` 会话里实现。拆分方案与每个复杂 spec 的设计都走 best-of-N + judge；拆分定案后先把 spec 骨架落库（`needs-design`），再逐个设计填充，设计完置 `ready-for-agent`。每个 spec 自带计划（接口变更、按优先级排列的待测行为、deep-module 备注），所以 `/tdd` 直接从 red-green 开始。替代 upstream `to-issues` 并吸收 upstream `tdd` 的 Planning 步骤。以 `/to-prd` 产出的 `prd`（或一个 bug、或一次 grilled 对话）作为父项输入。位于 `/grill-with-docs`/`/to-prd` 与 `/tdd` 之间。
 - **[tdd](./tdd/SKILL.md)** —— 用测试先行（red-green-refactor）实现一个规划完备的 spec。纯实现：`/to-spec` 给出的 spec 已带好接口和按优先级排列的行为，所以这个 skill 直接从 tracer bullet 开始 —— 没有 planning 步骤。完全替代 upstream `tdd`（planning 已移到 `/to-spec`）。位于 `/to-spec` 之后。
 - **[codemap](./codemap/SKILL.md)** —— 生成、更新或 drift-check agent 可读的 CodeMaps：渐进式代码地形索引，能把 agent 引到带源码链接的证据，而不必加载整个仓库。项目级（广度优先）或特性级（深度优先）地图，位于 `docs/codemap/`。喂给 `/to-spec` 的 "reduce chaos" 步骤，以及任何需要先看地形的 skill。改编自 `sdd-riper`。
-- **[sdd-flow](./sdd-flow/SKILL.md)** —— 端到端 SDD 编排器：grill → prd → spec → build → review → maintain。只负责交接与人工关卡（gate 时指向已落库的 spec 文件让用户 review）；spec 质量由 `/to-spec` 自带的两层 best-of-N（拆分 + 复杂 spec 设计）保证，不归本 skill。每个阶段都委托给对应 skill。模型调用；自动串起整条流水线（grill → prd → spec → build）—— grill 用模型调用的 `/grilling` + `/domain-modeling` 核心，而非用户调用的 `/grill-with-docs`；对用户调用的 `/triage` 与 `/handoff` 只读取 / 建议。
+- **[sdd-flow](./sdd-flow/SKILL.md)** —— 端到端 SDD 编排器：grill → prd → spec → build → review → maintain。只负责交接与人工关卡（gate 时指向已落库的 spec 文件让用户 review）；spec 质量由 `/to-spec` 自带的两层 best-of-N（拆分 + 复杂 spec 设计）保证，不归本 skill。每个阶段都委托给对应 skill。模型调用；自动串起整条流水线（grill → prd → spec → build）—— grill 用模型调用的 `/grilling` + `/domain-modeling` 核心，而非用户调用的 `/grill-with-docs`；`/handoff` 现为模型调用，收尾时直接调用生成下个会话启动 prompt；对用户调用的 `/triage` 只读取 / 建议。
+
+- **[handoff](./handoff/SKILL.md)** —— 把当前对话压缩成 OS 临时目录的 handoff 文件，并输出一条可直接粘贴的下个会话启动 prompt（「请阅读文件 <path> 然后继续 <action>」）。upstream `handoff` 的模型调用改造版（不再 user-only，可被 `/sdd-flow` 收尾时调用），并新增 emit starter prompt 一步。

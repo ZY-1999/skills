@@ -5,7 +5,7 @@ description: Implement a planning-complete spec test-first (red-green-refactor).
 
 # TDD: Implement a Spec
 
-The **planning is already done**. The spec from `/to-spec` carries the **Interface changes** (the public surface to test through), the **Acceptance criteria** (the prioritized behaviors to test, critical paths first), and the **Context** pointers. This skill is the implementation half: turn that spec into code, test-first.
+The **planning is already done**. The spec from `/to-spec` is planning-complete: **Design** (its *Interface delta* is the public surface to test through; the *Internal design* gives the data flow), **Acceptance criteria** (the prioritized behaviors to test, critical paths first — your test list), **Scope** (In/Out — leave Out alone, don't fix opportunistically), **Context** pointers, and **Rework on failure** (the revert point if a cycle goes sideways). This skill is the implementation half: turn that spec into code, test-first.
 
 If no spec is in hand, run `/to-spec` first.
 
@@ -46,7 +46,7 @@ RIGHT (vertical):
 
 ## Workflow
 
-The spec's **Acceptance criteria** is your test list; its **Interface changes** is the public surface you test through. Work the behaviors in the spec's priority order.
+The spec's **Acceptance criteria** is your test list; the **Design**'s *Interface delta* is the public surface you test through. Work the behaviors in the spec's priority order, and honor **Scope** — don't touch what's listed Out.
 
 ### 1. Tracer Bullet
 
@@ -80,7 +80,7 @@ Rules:
 After all tests pass, look for refactor candidates:
 
 - [ ] Extract duplication
-- [ ] Deepen modules (move complexity behind simple interfaces) — the spec may have flagged deep-module opportunities under Interface changes
+- [ ] Deepen modules (move complexity behind simple interfaces) — the spec's **Design** may have flagged deep-module opportunities in its *Interface delta* note
 - [ ] Apply SOLID principles where natural
 - [ ] Consider what new code reveals about existing code
 - [ ] Run tests after each refactor step

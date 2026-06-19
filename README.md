@@ -17,6 +17,7 @@
   | `engineering/to-prd` | [`/to-prd`](./skills/zy/to-prd/SKILL.md)（模型调用，可被编排） |
   | `engineering/tdd` | [`/tdd`](./skills/zy/tdd/SKILL.md)（纯实现） |
   | `engineering/to-issues` | [`/to-spec`](./skills/zy/to-spec/SKILL.md)（吸收其拆解职责） |
+  | `productivity/handoff` | [`/handoff`](./skills/zy/handoff/SKILL.md)（模型调用，输出下个会话启动 prompt） |
 
 ## 安装
 
@@ -65,14 +66,13 @@ claude plugin install zy-skills@zy-skills
 **Productivity**（通用非代码工作流）
 
 - **[grill-me](./skills/productivity/grill-me/SKILL.md)** — 围绕一个计划或设计被 relentless 地访谈，直到决策树每条分支都被解决。`（用户调用）`
-- **[handoff](./skills/productivity/handoff/SKILL.md)** — 把当前对话压缩成一份 handoff 文档，让另一个 agent 接着干。`（用户调用）`
 - **[teach](./skills/productivity/teach/SKILL.md)** — 跨多次会话教用户一项新概念，以当前目录作为有状态的教学工作区。`（用户调用）`
 - **[writing-great-skills](./skills/productivity/writing-great-skills/SKILL.md)** — 写好、改好 skill 的参考：让 skill 可预测的词汇与原则。`（用户调用）`
 - **[grilling](./skills/productivity/grilling/SKILL.md)** — grill-me / grill-with-docs 背后可复用的 relentless 访谈循环。`（模型调用）`
 
 ### 本 fork 新增（zy/）
 
-围绕 SDD 流水线新增，7 个；每个都可在 [skills/zy/README.md](./skills/zy/README.md) 查看完整说明。
+围绕 SDD 流水线新增，8 个；每个都可在 [skills/zy/README.md](./skills/zy/README.md) 查看完整说明。
 
 - **[route](./skills/zy/route/SKILL.md)** — 意图 → skill 路由器：扫一眼你想做什么，拿到处理它的那一个 skill（或一条短链）。`（用户调用）`
 - **[setup-skills](./skills/zy/setup-skills/SKILL.md)** — 为 SDD skills 配置仓库（本地 markdown issue 追踪器、triage 标签、domain 文档、初始 CodeMap）；`setup-matt-pocock-skills` 的本地-only 改造版。`（用户调用）`
@@ -81,6 +81,7 @@ claude plugin install zy-skills@zy-skills
 - **[tdd](./skills/zy/tdd/SKILL.md)** — 用 red-green-refactor 实现一个规划完备的 spec（纯实现，无 planning 步骤）。`（模型调用）`
 - **[codemap](./skills/zy/codemap/SKILL.md)** — 生成、更新或 drift-check agent 可读的 CodeMap（渐进式代码地形索引）。`（模型调用）`
 - **[sdd-flow](./skills/zy/sdd-flow/SKILL.md)** — 端到端 SDD 编排器：grill → prd → spec → build → review → maintain，含 spec 上的 best-of-N 自动审查并提交。`（模型调用）`
+- **[handoff](./skills/zy/handoff/SKILL.md)** — 把当前对话压缩成 OS 临时目录的 handoff 文件，并输出一条可直接粘贴的下个会话启动 prompt（「请阅读文件 <path> 然后继续 <action>」）。`（模型调用）`
 
 ### 其它
 

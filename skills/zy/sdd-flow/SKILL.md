@@ -1,6 +1,6 @@
 ---
 name: sdd-flow
-description: Drive a feature from idea to shipped using the full Spec-Driven Development pipeline — grill → prd → spec → TDD → review → doc maintenance — with an adversarial best-of-N auto-review-and-commit step on specs before the human gate, so specs are self-reviewed and landed before a human ever approves them. Use when the user wants to run the whole SDD flow end-to-end, says "take this idea and ship it" / "run the full flow" / "spec to ship", or wants the agent to review-and-commit specs on its own.
+description: Drive a feature from idea to shipped using the full Spec-Driven Development pipeline — grill → prd → spec → TDD → review → doc maintenance. Specs are produced by `/to-spec`, which self-vets both the decomposition and any complex spec design via best-of-N before landing them, so specs are reviewed and on disk before the human gate. Use when the user wants to run the whole SDD flow end-to-end, says "take this idea and ship it" / "run the full flow" / "spec to ship".
 ---
 
 # SDD Flow
@@ -16,16 +16,9 @@ idea → grill → prd → [Gate 0] → spec → [Gate A] → tdd(per spec) → 
 
 **Invocation contract.** Every stage uses model-invoked skills, so this orchestrator chains the whole pipeline automatically: grilling = `/grilling` + `/domain-modeling`; then `/to-prd`, `/to-spec`, `/tdd`, `/codemap`. `/triage` and `/handoff` are user-invoked; this skill only reads triage's state or suggests the user run handoff, never invokes them.
 
-## The best-of-N auto-review-and-commit step (used for specs)
+## How specs get vetted
 
-`/to-spec` defaults to "draft, quiz the user, publish." This orchestrator wraps it with an adversarial review loop so a spec is self-vetted before a human ever sees it:
-
-1. **Draft 2–3 candidates in parallel** — spawn that many `general-purpose` sub-agents in one message, each given the same brief (`/to-spec`'s template and quality bar, plus the project's `CONTEXT.md`, the approved PRD, and any ADRs in the touched area) but told to produce an _independent_ draft. Diversity is the point — don't let them converge. Do NOT publish yet.
-2. **Judge** all candidates in a separate fresh-context sub-agent — never let a drafter grade its own work. Give the judge every candidate plus `/to-spec`'s **quality bar** (resolve the rules by skill name, not by restating them). It ranks them, picks the strongest, and returns a list of concrete defects in that winner, each tied to a checklist item.
-3. **Refine** the winner to address every defect, then re-judge. Repeat until PASS, or until 3 rounds — at 3 rounds, stop and surface the remaining defects to the human rather than looping forever.
-4. **Publish** the passing specs to the issue tracker in dependency order, each tagged `ready-for-agent`.
-
-> For a trivial spec set you may drop to a single draft and skip straight to step 2's critique.
+Spec quality is owned by `/to-spec`, not this orchestrator. `/to-spec` runs two adversarial best-of-N loops with a fresh-context judge — one on the **decomposition** (how the PRD is cut into specs) and one on each **complex spec's design** — and it lands every spec skeleton on disk *before* designing it. So when Stage 3 returns, the specs are already self-reviewed and on disk under `.scratch/<feature>/specs/`, `ready-for-agent`. This skill just invokes `/to-spec` and then runs Gate A on the landed files. See `/to-spec` for the loop mechanics.
 
 ## Human gates — review the file, not the chat
 
@@ -59,9 +52,9 @@ The PRD is already on disk (Stage 2 published it under `.scratch/<feature>/specs
 
 Do not start specs until the human approves.
 
-### 3. Specs — `/to-spec` + best-of-N
+### 3. Specs — `/to-spec`
 
-Decompose the approved PRD into planning-complete specs (each one = one `/tdd` session). Run the best-of-N auto-review-and-commit step. Publish in dependency order so each spec can reference real identifiers in its `Blocked by` field.
+Decompose the approved PRD into planning-complete specs (each one = one `/tdd` session) via `/to-spec`. `/to-spec` self-vets the decomposition and each complex spec's design through best-of-N, lands every skeleton, then designs each one — so when it returns, the specs are on disk under `.scratch/<feature>/specs/`, fully designed, `ready-for-agent`.
 
 ### Gate A — human reviews the spec breakdown
 

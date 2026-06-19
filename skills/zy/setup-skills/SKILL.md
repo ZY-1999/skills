@@ -15,6 +15,16 @@ Scaffold the per-repo configuration that the skills assume:
 
 This is a prompt-driven skill, not a deterministic script. Explore, present what you found, confirm with the user, then write.
 
+## Existing spec / issue systems are reference only
+
+The repo may already have its own spec / PRD / issue-tracking system — bespoke markdown under `docs/specs/`, an exported knowledge base, a legacy `SPECS.md`, anything of the kind. Treat it as **input, not authority**:
+
+- In **Explore**, read it to understand the project's current state, terms, and prior decisions. That's reference material.
+- It does **not** change the structure this skill sets up. The layouts of the issue tracker (`.scratch/`), triage labels, domain docs (`CONTEXT.md` + `docs/adr/`), and CodeMap (`docs/codemap/`) are defined by this skill's defaults. Don't relocate them to match the existing system, don't fork a second layout alongside it, and don't reshape this skill's files to fit it.
+- If the existing system holds something worth keeping (a glossary, decision log, settled scope), fold that **content** into this skill's files — write it into `CONTEXT.md`, `docs/adr/`, `docs/agents/domain.md`. Adapt the content to this structure, never the structure to the content.
+
+This is distinct from step 2's "raise as a question if the repo contradicts the default": that rule covers *this skill's own outputs* already pointing somewhere else. An unrelated pre-existing system is not a contradiction — it's source material. Only an explicit user request to point one of this skill's outputs at the existing system counts as a step-2 exception.
+
 ## Process
 
 ### 1. Explore
@@ -27,6 +37,7 @@ Look at the current repo to understand its starting state. Read whatever exists;
 - `docs/agents/` — does this skill's prior output already exist?
 - `docs/codemap/` — does a project-level CodeMap already exist?
 - `.scratch/` — sign that the local-markdown issue tracker convention is already in use
+- Any pre-existing spec / PRD / issue system the repo already has (its own `docs/specs/`, a tracking doc, an exported knowledge base, …) — read it for context. **Reference only**; see the rule above.
 
 ### 2. Present the plan (defaults applied)
 

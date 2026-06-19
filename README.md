@@ -26,6 +26,26 @@ npx skills@latest add mattpocock/skills
 
 挑选所需 skill（务必选 `/setup-skills`），再在 agent 里运行 `/setup-skills` 配置仓库：本地 markdown issue 追踪器、triage 标签、domain 文档布局、以及一份初始的项目级 CodeMap。
 
+## 作为 Claude Code plugin 安装
+
+本仓库同时是一个 Claude Code plugin marketplace（见 [.claude-plugin/marketplace.json](./.claude-plugin/marketplace.json)），可整体作为一个 plugin 安装，skill 命名空间为 `mattpocock-skills:`。
+
+**本地路径（开发/测试）：**
+
+```bash
+claude plugin marketplace add .
+claude plugin install mattpocock-skills@zy-skills
+```
+
+**从 GitHub：**
+
+```bash
+claude plugin marketplace add ZY-1999/skills
+claude plugin install mattpocock-skills@zy-skills
+```
+
+或在 Claude Code 交互模式里：`/plugin marketplace add .` → `/plugin install mattpocock-skills@zy-skills`。安装后仍需运行 `/setup-skills` 完成仓库配置。
+
 ## Skill 清单
 
 > **调用类型**：**用户调用** 只能由你键入触发，职责是编排；**模型调用** 可由你触发，也能在任务匹配时被 agent 自动选用，承载可复用的纪律。一个用户调用 skill 可以调用模型调用 skill，但不会调用另一个用户调用 skill。

@@ -1,0 +1,19 @@
+{
+  "name": "zy-skills",
+  "owner": {
+    "name": "ZY-1999",
+    "url": "https://github.com/ZY-1999/skills"
+  },
+  "metadata": {
+    "description": "Fork of mattpocock/skills with a zy/ SDD skills bucket — installable as a Claude Code plugin."
+  },
+  "plugins": [
+    {
+      "name": "mattpocock-skills",
+      "source": "./",
+      "description": "Spec-Driven Development skills (grilling, PRD/spec, TDD, code maps, end-to-end SDD flow). Fork of mattpocock/skills with a zy/ SDD bucket.",
+      "homepage": "https://github.com/ZY-1999/skills",
+      "keywords": ["sdd", "tdd", "spec", "grilling", "skills", "codemap"]
+    }
+  ]
+}

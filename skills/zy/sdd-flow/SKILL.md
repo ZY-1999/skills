@@ -27,6 +27,17 @@ idea → grill → prd → [Gate 0] → spec → [Gate A] → tdd(per spec) → 
 
 > For a trivial spec set you may drop to a single draft and skip straight to step 2's critique.
 
+## Human gates — review the file, not the chat
+
+Every human gate (Gate 0, Gate A) fires **after** its stage has already published the artifact to the issue tracker — the PRD / specs are on disk as real files under `.scratch/<feature>/specs/` before the gate runs. So at a gate:
+
+- **Don't re-paste or summarize the artifact in chat.** Chat coordinates; it doesn't re-host content that already lives in a file.
+- **Point the user at the file(s).** Give the exact path(s) — the PRD file for Gate 0, the spec files in dependency order for Gate A. The user reviews the actual landed file in their editor; that file is the ground truth the next stage consumes, not a chat rendering of it.
+- **In-file edits count as approved feedback.** If the user edits the file while reviewing, fold those edits in (for specs, re-run the affected part of the best-of-N loop against the edited file).
+- Then ask the gate question and wait for the decision.
+
+Never run a gate against chat-only content — if an artifact isn't on disk yet, publish it first.
+
 ## Stages
 
 ### 1. Grill — `/grilling` + `/domain-modeling`
@@ -41,7 +52,7 @@ Synthesize the PRD from the grilled context (no interview — `/to-prd` forbids 
 
 ### Gate 0 — human reviews the PRD
 
-Present the committed PRD. Ask exactly: **"PRD looks good → break into specs? Or redo the PRD?"**
+The PRD is already on disk (Stage 2 published it under `.scratch/<feature>/specs/`). Point the user at that file and have them review it directly — don't re-paste it in chat (see *Human gates* above). Ask exactly: **"PRD looks good → break into specs? Or redo the PRD?"**
 
 - **Redo** → back to Stage 2, feeding the user's feedback into the next draft.
 - **Approve** → Stage 3.
@@ -54,7 +65,7 @@ Decompose the approved PRD into planning-complete specs (each one = one `/tdd` s
 
 ### Gate A — human reviews the spec breakdown
 
-Present the list (title, goal, parent, blocked-by, interface changes, behaviors to test). Ask: **"Specs look right → start building? Or redo the breakdown?"**
+The specs are already on disk (Stage 3 published them in dependency order under `.scratch/<feature>/specs/`). Point the user at those files and have them review them directly — don't re-paste the breakdown in chat (see *Human gates* above). Ask: **"Specs look right → start building? Or redo the breakdown?"**
 
 - **Redo** → back to Stage 3 with the user's feedback.
 - **Approve** → Stage 4.

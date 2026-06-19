@@ -80,7 +80,7 @@ claude plugin install zy-skills@zy-skills
 - **[to-spec](./skills/zy/to-spec/SKILL.md)** — 把 PRD / bug / 已 grilled 对话拆成 `spec`：原子、规划完备的单元，一个 spec = 一次 `/tdd` 会话。`（模型调用）`
 - **[tdd](./skills/zy/tdd/SKILL.md)** — 用 red-green-refactor 实现一个规划完备的 spec（纯实现，无 planning 步骤）。`（模型调用）`
 - **[codemap](./skills/zy/codemap/SKILL.md)** — 生成、更新或 drift-check agent 可读的 CodeMap（渐进式代码地形索引）。`（模型调用）`
-- **[sdd-flow](./skills/zy/sdd-flow/SKILL.md)** — 端到端 SDD 编排器：grill → prd → spec → build → review → maintain，含 spec 上的 best-of-N 自动审查并提交。`（模型调用）`
+- **[sdd-flow](./skills/zy/sdd-flow/SKILL.md)** — 端到端 SDD 编排器：grill → prd → spec → build → review → maintain，串接各阶段、管 git 检查点与人工关卡（spec 质量审查归 `/to-spec`，不归本 skill）。`（模型调用）`
 - **[handoff](./skills/zy/handoff/SKILL.md)** — 把当前对话压缩成 OS 临时目录的 handoff 文件，并输出一条可直接粘贴的下个会话启动 prompt（「请阅读文件 <path> 然后继续 <action>」）。`（模型调用）`
 
 ### 其它

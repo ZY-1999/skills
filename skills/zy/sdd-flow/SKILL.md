@@ -18,7 +18,7 @@ idea → grill → prd → [Gate 0] → spec → [Gate A] → tdd(per spec) → 
 
 ## How specs get vetted
 
-Spec quality is owned by `/to-spec`, not this orchestrator. `/to-spec` runs two adversarial best-of-N loops with a fresh-context judge — one on the **decomposition** (how the PRD is cut into specs) and one on each **complex spec's design** — and it lands every spec skeleton on disk *before* designing it. So when Stage 3 returns, the specs are already self-reviewed and on disk in the issue tracker, `ready-for-agent`. This skill just invokes `/to-spec` and then runs Gate A on the landed files. See `/to-spec` for the loop mechanics.
+Spec quality is owned by `/to-spec`, not this orchestrator. `/to-spec` best-of-N's the **decomposition** (how the PRD is cut into specs) with a fresh-context judge, designs each spec directly by default and escalates only the complex ones to `/codebase-design`'s DESIGN-IT-TWICE, and it lands every spec skeleton on disk *before* designing it. So when Stage 3 returns, the specs are already self-reviewed and on disk in the issue tracker, `ready-for-agent`. This skill just invokes `/to-spec` and then runs Gate A on the landed files. See `/to-spec` for the mechanics.
 
 ## Human gates — review the file, not the chat
 
@@ -74,7 +74,7 @@ Do not start specs until the human approves.
 
 ### 3. Specs — `/to-spec`
 
-Decompose the approved PRD into planning-complete specs (each one = one `/tdd` session) via `/to-spec`. `/to-spec` self-vets the decomposition and each complex spec's design through best-of-N, lands every skeleton, then designs each one — so when it returns, the specs are on disk in the issue tracker, fully designed, `ready-for-agent`.
+Decompose the approved PRD into planning-complete specs (each one = one `/tdd` session) via `/to-spec`. `/to-spec` self-vets the decomposition through best-of-N + judge, lands every skeleton, then designs each one (directly by default, DESIGN-IT-TWICE for the complex ones) — so when it returns, the specs are on disk in the issue tracker, fully designed, `ready-for-agent`.
 
 ### Gate A — human reviews the spec breakdown
 
@@ -89,7 +89,7 @@ For each approved spec whose blockers are done:
 
 1. Pick the next unblocked spec (read the tracker's status/labels — set by `/triage` — if unclear).
 2. Run `/tdd` — red-green-refactor, one vertical slice per tracer bullet. The spec already carries the interface and prioritized behaviors, so `/tdd` starts straight at red-green (no separate planning step).
-3. Commit the spec's code + tests + status change as one commit (git checkpoint 3). Update the spec's status (`ready-for-human`, or closed per the tracker).
+3. Commit the spec's code + tests + status change as one commit (git checkpoint 3). `/tdd` already flipped the status in its Close step — this just commits it.
 4. Next spec.
 
 Continue until every approved spec is built.

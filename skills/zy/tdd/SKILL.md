@@ -5,7 +5,7 @@ description: Implement a planning-complete spec test-first (red-green-refactor).
 
 # TDD: Implement a Spec
 
-The **planning is already done**. The spec from `/to-spec` is planning-complete: **Design** (its *Interface delta* is the public surface to test through; the *Internal design* gives the data flow), **Acceptance criteria** (the prioritized behaviors to test, critical paths first — your test list), **Scope** (In/Out — leave Out alone, don't fix opportunistically), **Context** pointers, and **Rework on failure** (the revert point if a cycle goes sideways). This skill is the implementation half: turn that spec into code, test-first.
+The **planning is already done** — `/to-spec` produced a planning-complete spec (design, acceptance criteria, scope, context, rework path). This skill is the implementation half: take that spec and turn it into code, test-first.
 
 If no spec is in hand, run `/to-spec` first.
 
@@ -18,6 +18,8 @@ Adapted from upstream `tdd`, with the Planning step removed — planning now liv
 **Good tests** are integration-style: they exercise real code paths through public APIs. They describe _what_ the system does, not _how_ it does it. A good test reads like a specification — "user can checkout with valid cart" tells you exactly what capability exists. These tests survive refactors because they don't care about internal structure.
 
 **Bad tests** are coupled to implementation. They mock internal collaborators, test private methods, or verify through external means (like querying a database directly instead of using the interface). The warning sign: your test breaks when you refactor, but behavior hasn't changed.
+
+This is `/codebase-design`'s **"interface is the test surface"** principle: wanting to test *past* the interface is a signal the module is the wrong shape — fix the interface, don't paper over it with a mock. The testability rules below operationalize it (and hold whether or not `/codebase-design` is loaded).
 
 ## Anti-Pattern: Horizontal Slices
 
@@ -47,6 +49,8 @@ RIGHT (vertical):
 ## Workflow
 
 The spec's **Acceptance criteria** is your test list; the **Design**'s *Interface delta* is the public surface you test through. Work the behaviors in the spec's priority order, and honor **Scope** — don't touch what's listed Out.
+
+**Design testable code as you go.** As you write each piece of minimal code, shape it for testability per `/codebase-design`'s three rules: **accept dependencies, don't create them**; **return results, don't produce side effects**; **keep the surface small**. Tests then fall out naturally instead of needing mocks. When `/codebase-design` isn't loaded, those three phrases are enough to apply.
 
 ### 1. Tracer Bullet
 
@@ -80,12 +84,17 @@ Rules:
 After all tests pass, look for refactor candidates:
 
 - [ ] Extract duplication
-- [ ] Deepen modules (move complexity behind simple interfaces) — the spec's **Design** may have flagged deep-module opportunities in its *Interface delta* note
+- [ ] **Deepen modules** — via `/codebase-design`'s **DEEPENING** pattern; the spec's **Design** may have flagged deep-module opportunities
+- [ ] **Check seam and depth on what you built** — deletion test (delete it; complexity vanishing means a pass-through) and one-vs-two-adapters (one adapter = a hypothetical seam, drop it). See `/codebase-design`.
 - [ ] Apply SOLID principles where natural
 - [ ] Consider what new code reveals about existing code
 - [ ] Run tests after each refactor step
 
-**Never refactor while RED.** Get to GREEN first.
+**Never refactor while RED.** Get to GREEN first. If a cycle stays RED after honest minimal effort, fall back to the spec's **Rework on failure** point rather than forcing code to fit.
+
+### 4. Close the spec
+
+With every behavior in the spec's **Acceptance criteria** GREEN and refactor done, flip the spec file's `Status: ready-for-agent` → `ready-for-human` (or `closed`, per the tracker) so triage and the next stage know it's implemented.
 
 ## Checklist Per Cycle
 

@@ -75,6 +75,7 @@ Is each spec's design deep enough? Judge the design against:
 - **Internal architecture** — structural decisions made (module boundaries, seam, state/data-flow, deep-module opportunities), or none needed for a trivial spec; implementation detail left to `/tdd`.
 - **Test seam** — fewest crossed, ideally one external seam; interface is the test surface.
 - **Self-contained** — a fresh-context agent needs nothing beyond this spec + glossary + ADRs; describe behaviour, not implementation.
+- **Consistent with siblings and ADRs** — its _Interface delta_ / _Internal architecture_ / naming agree with the specs already landed (step 4 skeletons + providers designed before it, since step 5 designs in dependency order), and it contradicts no key-decision ADR; where it must depart from an ADR, flag it for the human — don't land it quietly.
 
 </design-bar>
 
@@ -82,18 +83,13 @@ Either way the design must clear the **design bar** above. `/codebase-design` is
 
 Use the project glossary vocabulary in titles and bodies. Do NOT close or modify the parent PRD/bug issue.
 
-### 6. Self-review — coverage and cross-spec consistency
+### 6. Self-review — coverage and a final consistency sweep
 
-Before declaring done, self-check the specs two ways — against their source (the parent PRD/bug, or the grilled design if no parent) for **coverage**, and against each other for **consistency**:
+Before declaring done, self-check the specs against their source (the parent PRD/bug, or the grilled design if no parent) for **coverage**, then run one holistic pass for cross-spec consistency:
 
 - **Goal coverage** — every goal / user story in the source maps to at least one spec's `Goal` + `Acceptance criteria`. No goal orphaned; no spec that serves nothing in the source.
 - **Test coverage** — when the source is a PRD, its **Testing Decisions** (what makes a good test, which modules, prior art) are reflected across the specs' acceptance behaviors and test-seam choices.
 - **Scope fidelity** — nothing out-of-scope crept in; nothing in-scope was dropped.
-- **No conflicts between specs** — where specs touch the same thing they must agree:
-  - one consistent _Interface delta_ for any shared public surface (endpoint/schema/signature);
-  - one consistent _Internal architecture_ for any shared structural concern (state ownership, data-flow direction, seam placement);
-  - no contradictory edits to the same code area (real `Blocked by` deps are fine);
-  - `Blocked by` directions match the actual interface coupling (a consumer is blocked by the provider it relies on);
-  - terms/names consistent across specs (per the `CONTEXT.md` glossary).
+- **Final consistency sweep** — the design bar sees each spec only against what was landed before it (all skeletons + its providers), so two specs that share a surface but carry no `Blocked by` (designed concurrently) can still diverge. With every design now on disk, re-confirm one consistent _Interface delta_ / _Internal architecture_ / naming across each shared surface.
 
-If a gap or conflict surfaces, loop back — add/merge/split specs (step 3) or refine a design (step 5) to close it. When coverage is complete and the specs are conflict-free, all specs are `ready-for-agent`; point the user at the spec files in the issue tracker as the ground truth (don't re-paste them in chat).
+If a gap or conflict surfaces, loop back — add/merge/split specs (step 3) or refine a design (step 5) to close it. When coverage is complete and the sweep is clean, all specs are `ready-for-agent`; point the user at the spec files in the issue tracker as the ground truth (don't re-paste them in chat).

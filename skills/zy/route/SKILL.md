@@ -12,6 +12,7 @@ Scan the **intent** below; run the skill on the right. One question → one skil
 
 ## Build something
 
+- **Start from an architecture scan** → `/improve-architecture`
 - **Ship end-to-end, hands-off** → `/sdd-flow`
 - **Drive it myself, I have a codebase** → `/grill-with-docs` → `/to-prd` → `/to-spec` → `/tdd`
 - **Drive it myself, no codebase** → `/grill-me` → `/to-prd` → `/to-spec` → `/tdd`
@@ -32,7 +33,6 @@ Scan the **intent** below; run the skill on the right. One question → one skil
 ## Code & terrain
 
 - **Need an agent-facing code map, or the map may be stale** → `/codemap`
-- **Surface architecture deepening opportunities** → `/improve-codebase-architecture`
 
 ## Session & context
 

@@ -5,7 +5,7 @@ description: Drive a feature from idea to shipped using the full Spec-Driven Dev
 
 # SDD Flow
 
-The end-to-end Spec-Driven Development pipeline. Each stage **delegates** to an existing skill — this skill owns only the hand-off, the git checkpoints (a branch before the first write, plus a commit at each gate and per spec), the best-of-N auto-review-and-commit on specs, and the human gates between stages. Do not restate the sub-skills' content here; invoke them.
+The end-to-end Spec-Driven Development pipeline. Each stage **delegates** to an existing skill — this skill owns only the hand-off, the git checkpoints (a branch + first commit at Gate 0, a commit at Gate A, and one per spec), the best-of-N auto-review-and-commit on specs, and the human gates between stages. Do not restate the sub-skills' content here; invoke them.
 
 Requires `/setup-skills` to have run in this repo (issue tracker, triage labels, domain docs). If `docs/agents/issue-tracker.md` is missing, stop and run `/setup-skills` first.
 
@@ -35,15 +35,14 @@ Never run a gate against chat-only content — if an artifact isn't on disk yet,
 
 This orchestrator owns three git operations — the only branch/commits this flow makes on top of what a delegated skill commits internally (e.g. `/to-spec` landing spec skeletons). Each has one trigger: hit it, then move on.
 
-1. **Branch before the first file write.** Before any artifact hits disk — the grill stage writes `CONTEXT.md` / ADRs inline — create and switch to a per-issue branch named by work type and slug:
+Stages 1–2 (grill + PRD) write their artifacts — `CONTEXT.md`, ADRs, the PRD file — into the working tree **uncommitted, on no branch yet**. The feature isn't approved, so git isn't committed to it either — if the human walks away at Gate 0, the working tree is the only place this work lives, and dropping it is a `git restore`. The branch and the first commit land only after the PRD is approved.
+
+1. **Branch + first commit at Gate 0 (PRD approved).** PRD approval is the commitment point: create and switch to a per-issue branch named by work type and slug, then commit the Stage 1–2 artifacts onto it in one go.
    - PRD-driven work → `feature/<slug>`
    - bug-driven work → `bugfix/<slug>`
-   `<slug>` is the grilled feature/bug name already used for the `.scratch/<YYYY-MM-DD>-<slug>/` tracker folder. Never write a flow artifact on `main` / `master` or another feature branch — the first write is the branch deadline.
+   `<slug>` is the grilled feature/bug name already used for the `.scratch/<YYYY-MM-DD>-<slug>/` tracker folder. The commit covers everything the human just signed off on: `CONTEXT.md` / ADR changes from grilling, plus the PRD file(s).
 
-2. **Commit after every approved gate.** Each gate approves an on-disk artifact — commit it before entering the next stage, so the repo matches what the human signed off on:
-   - **Gate 0 (PRD approved)** → commit the PRD file(s).
-   - **Gate A (spec breakdown approved)** → commit the landed spec files.
-   Don't carry an uncommitted, just-approved artifact into the next stage.
+2. **Commit at Gate A (spec breakdown approved).** The specs are already on disk; commit them before Stage 4 starts. Don't carry an uncommitted, just-approved artifact into the build.
 
 3. **Commit after each spec is built.** After `/tdd` finishes a spec and its status flips to `ready-for-human` / closed, commit that spec's code + tests + status change as **one commit** (one spec = one commit). Restated from Stage 4 step 3 so the full checkpoint list lives in one place.
 
@@ -53,7 +52,7 @@ Commit messages reference the issue slug. If the repo has a commit-message or pr
 
 ### 1. Grill — `/grilling` + `/domain-modeling`
 
-**Git checkpoint 1 fires first** — before the grill's first `CONTEXT.md` / ADR write, create and switch to the `feature/<slug>` or `bugfix/<slug>` branch (see *Git checkpoints*).
+No branch yet — the grill writes `CONTEXT.md` / ADRs into the working tree uncommitted. The branch is created at Gate 0 once the PRD is approved (see *Git checkpoints*).
 
 Run a `/grilling` session, using the `/domain-modeling` skill — interview the user one question at a time until the plan is fully resolved, sharpening terminology and updating `CONTEXT.md` and ADRs inline as you go. This is the model-invoked core of `/grill-with-docs` (which is just these two skills wrapped as a user-invoked entry point).
 
@@ -68,7 +67,7 @@ Synthesize the PRD from the grilled context (no interview — `/to-prd` forbids 
 The PRD is already on disk (Stage 2 published it to the issue tracker). Point the user at that file and have them review it directly — don't re-paste it in chat (see *Human gates* above). Ask exactly: **"PRD looks good → break into specs? Or redo the PRD?"**
 
 - **Redo** → back to Stage 2, feeding the user's feedback into the next draft.
-- **Approve** → commit the PRD (git checkpoint 2), then Stage 3.
+- **Approve** → create the `feature/<slug>` / `bugfix/<slug>` branch and commit the grill + PRD artifacts onto it (git checkpoint 1), then Stage 3.
 
 Do not start specs until the human approves.
 

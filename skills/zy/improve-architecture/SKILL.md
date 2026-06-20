@@ -33,7 +33,7 @@ Apply the **deletion test** to anything you suspect is shallow: would deleting i
 
 ### 2. Publish the report to the issue tracker
 
-**Create the feature branch and folder.** Resolve today's date as `<YYYY-MM-DD>` and the current time as `<HHmmss>` (seconds keep each scan unique; colons are illegal in Windows filenames). The feature-slug is `architecture-review-<HHmmss>`. First create and switch to branch `feature/architecture-review-<HHmmss>` — SDD writes nothing on `main`/`master`. Then create `.scratch/<YYYY-MM-DD>-architecture-review-<HHmmss>/` and write a self-contained `architecture-review.html` into it — Tailwind + Mermaid via CDN, nothing else.
+**Create the feature folder.** Resolve today's date as `<YYYY-MM-DD>` and the current time as `<HHmmss>` (seconds keep each scan unique; colons are illegal in Windows filenames). The scan-slug is `architecture-review-<HHmmss>`. Create `.scratch/<YYYY-MM-DD>-architecture-review-<HHmmss>/` and write a self-contained `architecture-review.html` into it — Tailwind + Mermaid via CDN, nothing else.
 
 Render the report per [references/html-report.md](./references/html-report.md) — scaffold, candidate-card fields, diagram patterns, and vocabulary. Each candidate card carries **Files** / **Problem** / **Solution** (plain English) / **Benefits** (in locality & leverage terms, how tests improve) / **Before-After diagram** / recommendation-strength badge (`Strong` / `Worth exploring` / `Speculative`). End with a **Top recommendation**.
 
@@ -61,18 +61,14 @@ Run `/to-prd` against the feature folder. The PRD covers **the Top recommendatio
 
 ### 4. Gate 0 — user reviews the PRD, then hand off to /sdd-flow
 
-The PRD is on disk in the feature folder (Step 3 published it). This is SDD's **Gate 0** — the first human gate.
+The PRD is on disk in the feature folder (Step 3 published it) — the same kind of PRD `/sdd-flow` produces in its Stage 2, made by the same `/to-prd`. This is SDD's **Gate 0**, and it runs identically to `/sdd-flow`'s .
 
 - Point the user at the PRD file (not the chat) and have them review it directly. Ask: **"PRD looks good → break into specs? Or redo the PRD?"**
 - **Redo** → back to Step 3: re-run `/to-prd` with the user's feedback.
-- **Approve** → commit the report + PRD in the feature folder (SDD's "commit after each approved gate" checkpoint), then invoke `/sdd-flow` to continue from **Stage 3 (specs)**. The PRD is already approved, so `/sdd-flow` skips its grill/prd stages and goes straight to `/to-spec`; from there the standard pipeline runs (spec → Gate A → tdd → review → summarize), owned by `/sdd-flow`.
+- **Approve** → equals `/sdd` prd file review completed, run remaining steps of `/sdd-flow`.
 
 ## When NOT to use this skill
 
 - You have a concrete feature idea (not an architecture scan) → `/sdd-flow` directly.
 - You already know what to change → skip the scan; run `/to-prd` directly.
 - You need a code-navigation index, not deepening candidates → `/codemap`.
-
-## Supersedes /improve-codebase-architecture
-
-Replaces upstream `/improve-codebase-architecture` in this fork (de-registered from the plugin; files kept in `engineering/` for clean merging with `origin/main`). Reuses ICA's Explore + HTML-report discovery, but swaps its in-line design **grilling** for the SDD path: picked candidate → `/to-prd` → design in `/to-spec` (Gate A) → `/sdd-flow` owns the rest. You lose co-design grilling; you gain the full SDD pipeline (specs, tests, gates, commits).

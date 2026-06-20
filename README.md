@@ -19,6 +19,7 @@
   | `engineering/to-issues` | [`/to-spec`](./skills/zy/to-spec/SKILL.md)（吸收其拆解职责） |
   | `productivity/handoff` | [`/handoff`](./skills/zy/handoff/SKILL.md)（模型调用，输出下个会话启动 prompt） |
   | `engineering/improve-codebase-architecture` | [`/improve-architecture`](./skills/zy/improve-architecture/SKILL.md)（架构发现 → SDD 入口；ICA 的 grilling 设计由 `/to-spec` + Gate A 替代） |
+  | `engineering/diagnosing-bugs` | [`/diagnose-bug`](./skills/zy/diagnose-bug/SKILL.md)（诊断循环 → 产出 `bug` 父项接力 SDD；保留 Phase 1-4 诊断纪律） |
 
 ## 安装
 
@@ -59,7 +60,6 @@ claude plugin install zy-skills@zy-skills
 - **[grill-with-docs](./skills/engineering/grill-with-docs/SKILL.md)** — grilling 会话，同时构建项目领域模型、打磨术语，并就地更新 `CONTEXT.md` 与 ADR。`（用户调用）`
 - **[triage](./skills/engineering/triage/SKILL.md)** — 把 issue 在一组 triage 角色的状态机里流转。`（用户调用）`
 - **[prototype](./skills/engineering/prototype/SKILL.md)** — 搭一个一次性原型来厘清设计（可运行终端程序，或可在一个路由上切换的几种 UI 变体）。`（用户调用）`
-- **[diagnosing-bugs](./skills/engineering/diagnosing-bugs/SKILL.md)** — 顽固 bug 与性能回归的纪律化诊断循环：复现 → 最小化 → 假设 → 插桩 → 修复 → 回归测试。`（模型调用）`
 - **[domain-modeling](./skills/engineering/domain-modeling/SKILL.md)** — 主动构建并打磨项目领域模型——用词汇表挑战术语、用边界场景压测、就地更新 `CONTEXT.md` 与 ADR。`（模型调用）`
 - **[codebase-design](./skills/engineering/codebase-design/SKILL.md)** — 设计深模块的共享纪律与词汇：大量行为藏在一个小接口后，放在干净的接缝处，可通过该接口测试。`（模型调用）`
 
@@ -72,12 +72,13 @@ claude plugin install zy-skills@zy-skills
 
 ### 本 fork 新增（zy/）
 
-围绕 SDD 流水线新增，9 个；每个都可在 [skills/zy/README.md](./skills/zy/README.md) 查看完整说明。
+围绕 SDD 流水线新增，10 个；每个都可在 [skills/zy/README.md](./skills/zy/README.md) 查看完整说明。
 
 - **[route](./skills/zy/route/SKILL.md)** — 意图 → skill 路由器：扫一眼你想做什么，拿到处理它的那一个 skill（或一条短链）。`（用户调用）`
 - **[setup-skills](./skills/zy/setup-skills/SKILL.md)** — 为 SDD skills 配置仓库（本地 markdown issue 追踪器、triage 标签、domain 文档、初始 CodeMap）；`setup-matt-pocock-skills` 的本地-only 改造版。`（用户调用）`
 - **[improve-architecture](./skills/zy/improve-architecture/SKILL.md)** — 扫描代码库寻找架构深化机会，以可视化 HTML 报告呈现候选并发布到 issue tracker；**只做发现不做设计**，跑 `/to-prd` 综合 PRD，过 SDD 的 Gate 0 后交接 `/sdd-flow` 从 spec 继续后续流程。`（用户调用）`
-- **[to-prd](./skills/zy/to-prd/SKILL.md)** — 把当前对话综合成 PRD 并发布到 issue 追踪器（不访谈，只综合）。`（模型调用）`
+- **[diagnose-bug](./skills/zy/diagnose-bug/SKILL.md)** — 顽固 bug 与性能回归的纪律化诊断循环：构建反馈循环 → 复现最小化 → 假设 → 插桩锁定根因，然后把诊断交给 `/to-prd` 产出 `Type: bug` 父项（接力 `/to-spec`→`/tdd`）。`（模型调用）`
+- **[to-prd](./skills/zy/to-prd/SKILL.md)** — 把当前对话综合成父项 issue 并发布到 issue 追踪器（不访谈，只综合）：feature → `prd`、bug → `bug`、架构深化 → `prd`（architecture 模板）。`（模型调用）`
 - **[to-spec](./skills/zy/to-spec/SKILL.md)** — 把 PRD / bug / 已 grilled 对话拆成 `spec`：原子、规划完备的单元，一个 spec = 一次 `/tdd` 会话。`（模型调用）`
 - **[tdd](./skills/zy/tdd/SKILL.md)** — 用 red-green-refactor 实现一个规划完备的 spec（纯实现，无 planning 步骤）。`（模型调用）`
 - **[codemap](./skills/zy/codemap/SKILL.md)** — 生成、更新或 drift-check agent 可读的 CodeMap（渐进式代码地形索引）。`（模型调用）`

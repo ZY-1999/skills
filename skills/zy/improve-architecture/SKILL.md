@@ -52,12 +52,12 @@ Fix anything broken, re-check, then open the file for the user — `xdg-open <pa
 
 ### 3. Run /to-prd — the report is the PRD's resource file
 
-Run `/to-prd` against the feature folder. The PRD covers **the Top recommendation plus any candidates tightly coupled to it — nothing else:**
+Run `/to-prd` against the feature folder, telling it the source is **architecture** so it uses the architecture PRD template (`Type: prd`, with `Deepening Goals` in place of `User Stories`). The PRD covers **the Top recommendation plus any candidates tightly coupled to it — nothing else:**
 
 - **In scope**: the Top recommendation, and any candidate that shares its module / seam / files, or has a real dependency on it (e.g. one is the prefactor that makes the other possible). These belong in one PRD; `/to-spec` will split them into a spec sequence.
 - **Out of scope**: independent candidates — different module, different problem, each shippable alone. They stay recorded in `architecture-review.html` for a later scan or a manual feature. Do not fold them in.
 
-`architecture-review.html` is this PRD's **resource file** — `/to-prd` reads the in-scope candidates' Problem + Benefits + Solution-direction from it and synthesises them into the PRD's Problem Statement / User Stories / Implementation Decisions, then publishes the `prd` to the same feature folder. Tell `/to-prd` to reference the report (e.g. a line in _Further Notes_ pointing at `architecture-review.html`) so the PRD traces back to its source.
+`architecture-review.html` is this PRD's **resource file** — `/to-prd` reads the in-scope candidates' Problem + Benefits + Solution-direction from it and synthesises them into the PRD's Problem Statement / Deepening Goals / Implementation Decisions, then publishes the `prd` to the same feature folder. Tell `/to-prd` to reference the report (e.g. a line in _Further Notes_ pointing at `architecture-review.html`) so the PRD traces back to its source.
 
 ### 4. Gate 0 — user reviews the PRD, then hand off to /sdd-flow
 

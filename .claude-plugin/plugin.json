@@ -1,7 +1,6 @@
 {
   "name": "zy-skills",
   "skills": [
-    "./skills/engineering/diagnosing-bugs",
     "./skills/engineering/grill-with-docs",
     "./skills/engineering/triage",
     "./skills/engineering/prototype",
@@ -10,6 +9,7 @@
     "./skills/zy/route",
     "./skills/zy/setup-skills",
     "./skills/zy/improve-architecture",
+    "./skills/zy/diagnose-bug",
     "./skills/zy/to-prd",
     "./skills/zy/to-spec",
     "./skills/zy/codemap",

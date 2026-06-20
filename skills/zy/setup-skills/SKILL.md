@@ -92,7 +92,7 @@ The block:
 
 ### CodeMap
 
-[one-line summary — project-level terrain index under `docs/codemap/`; refresh or add feature maps via `/codemap`; when unsure whether a map is still trustworthy, run `/codemap` drift-check — if it reports drift, update the affected map].
+[one-line summary — start here when exploring the codebase: a project-level terrain index under `docs/codemap/`; refresh or add feature maps via `/codemap`; when unsure whether a map is still trustworthy, run `/codemap` drift-check — if it reports drift, update the affected map].
 ```
 
 Then write the three docs files using the seed templates in this skill folder as a starting point:

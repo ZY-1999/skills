@@ -92,9 +92,13 @@ After all tests pass, look for refactor candidates:
 
 **Never refactor while RED.** Get to GREEN first. If a cycle stays RED after honest minimal effort, fall back to the spec's **Rework on failure** point rather than forcing code to fit.
 
-### 4. Close the spec
+### 4. Maintain the codemap
 
-With every behavior in the spec's **Acceptance criteria** GREEN and refactor done, flip the spec file's `Status: ready-for-agent` → `ready-for-human` (or `closed`, per the tracker) so triage and the next stage know it's implemented.
+If `/codemap` is loaded and the spec touched an area a `docs/codemap/` map covers, run `/codemap` **drift-check** against that map once the implementation is GREEN — if it reports drift, update the affected map. Skip when `/codemap` isn't loaded or no map covers the area. Do this before closing the spec, so any map update lands in the same commit as the code.
+
+### 5. Close the spec
+
+With every behavior in the spec's **Acceptance criteria** GREEN, refactor done, and the codemap current, flip the spec file's `Status: ready-for-agent` → `ready-for-human` (or `closed`, per the tracker) so triage and the next stage know it's implemented.
 
 ## Checklist Per Cycle
 

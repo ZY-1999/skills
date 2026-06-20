@@ -83,13 +83,20 @@ Either way the design must clear the **design bar** above. `/codebase-design` is
 
 Use the project glossary vocabulary in titles and bodies. Do NOT close or modify the parent PRD/bug issue.
 
-### 6. Self-review — coverage and a final consistency sweep
+### 6. Adversarial review — two fresh-context sub-agents
 
-Before declaring done, self-check the specs against their source (the parent PRD/bug, or the grilled design if no parent) for **coverage**, then run one holistic pass for cross-spec consistency:
+The agent that just designed the specs can't grade its own work. Fan out **two independent fresh-context sub-agents** (`general-purpose`, spawned in one message so they run in parallel) — each gets the landed specs plus **one** input and never the design chat, and returns PASS or specific defects (the spec + the failing line). Splitting along two axes keeps each sub-agent's context focused, because the inputs differ:
 
-- **Goal coverage** — every goal / user story in the source maps to at least one spec's `Goal` + `Acceptance criteria`. No goal orphaned; no spec that serves nothing in the source.
-- **Test coverage** — when the source is a PRD, its **Testing Decisions** (what makes a good test, which modules, prior art) are reflected across the specs' acceptance behaviors and test-seam choices.
-- **Scope fidelity** — nothing out-of-scope crept in; nothing in-scope was dropped.
-- **Final consistency sweep** — the design bar sees each spec only against what was landed before it (all skeletons + its providers), so two specs that share a surface but carry no `Blocked by` (designed concurrently) can still diverge. With every design now on disk, re-confirm one consistent _Interface delta_ / _Internal architecture_ / naming across each shared surface.
+- **Sub-agent A — coverage vs. the source.** Input: the landed specs + the parent PRD/bug (or the grilled-design summary if no parent). **Does not read code.** Checks the three coverage axes:
+  - **Goal coverage** — every goal / user story in the source maps to at least one spec's `Goal` + `Acceptance criteria`. No goal orphaned; no spec that serves nothing in the source.
+  - **Test coverage** — when the source is a PRD, its **Testing Decisions** (what makes a good test, which modules, prior art) are reflected across the specs' acceptance behaviors and test-seam choices.
+  - **Scope fidelity** — nothing out-of-scope crept in; nothing in-scope was dropped.
 
-If a gap or conflict surfaces, loop back — add/merge/split specs (step 3) or refine a design (step 5) to close it. When coverage is complete and the sweep is clean, all specs are `ready-for-agent`; point the user at the spec files in the issue tracker as the ground truth (don't re-paste them in chat).
+- **Sub-agent B — feasibility + cumulative consistency vs. the code.** Input: the landed specs + the **current codebase** (the `Context` areas each spec points at, plus `/codemap` if available) — never the source. Walk the specs **in `Blocked-by` order**, treat each one's _Interface delta_ / _Internal architecture_ as a transformation of the codebase, and **accumulate the running change** to check:
+  - **Sequential coherence** — each consumer's assumed interface is actually produced by an earlier provider spec; no spec assumes a surface no predecessor sets up.
+  - **Cumulative consistency** — specs touching the same file/surface accumulate to one _Interface delta_ / _Internal architecture_ / naming, not conflicting ones. (This is the step-5 design-bar "consistent with siblings" check seen globally and in order — the design bar only sees what landed before each spec; B sees every design together.)
+  - **Feasibility** — applied cumulatively, the specs describe a codebase that can actually be built: real seams exist or are created by an earlier spec; nothing requires a change its predecessors don't make. Flag any spec unbuildable as written.
+
+> **Trivial case** — single spec, or specs with no shared surface and no cross-spec coupling: drop Sub-agent B and run its check inline; keep A (coverage always matters).
+
+If either sub-agent returns defects, loop back — add/merge/split specs (step 3) or refine a design (step 5) — and re-run the affected sub-agent. When both return PASS, all specs are `ready-for-agent`; point the user at the spec files in the issue tracker as the ground truth (don't re-paste them in chat).

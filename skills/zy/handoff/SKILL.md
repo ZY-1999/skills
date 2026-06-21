@@ -30,7 +30,3 @@ After writing the file, output a **ready-to-paste starter prompt** for the next 
 - `<next action>` — the imperative the next agent should act on, drawn from the argument or inferred from the conversation (e.g. "实现 spec #3 的 acceptance 行为", "review the spec cut at Gate A", "continue debugging the redirect loop").
 
 That single line is what the user pastes into the next session.
-
----
-
-Adapted from upstream `handoff`: made **model-invoked** (no `disable-model-invocation`) so the SDD flow can invoke it at wrap-up, and added the step-2 starter-prompt emit so the handoff yields a ready-to-paste next-session input, not just a file.

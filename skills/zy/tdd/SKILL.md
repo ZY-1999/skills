@@ -9,8 +9,6 @@ The **planning is already done** — `/to-spec` produced a planning-complete spe
 
 If no spec is in hand, run `/to-spec` first.
 
-Adapted from upstream `tdd`, with the Planning step removed — planning now lives in `/to-spec`.
-
 ## Philosophy
 
 **Core principle**: Tests should verify behavior through public interfaces, not implementation details. Code can change entirely; tests shouldn't.
@@ -19,7 +17,7 @@ Adapted from upstream `tdd`, with the Planning step removed — planning now liv
 
 **Bad tests** are coupled to implementation. They mock internal collaborators, test private methods, or verify through external means (like querying a database directly instead of using the interface). The warning sign: your test breaks when you refactor, but behavior hasn't changed.
 
-This is `/codebase-design`'s **"interface is the test surface"** principle: wanting to test *past* the interface is a signal the module is the wrong shape — fix the interface, don't paper over it with a mock. The testability rules below operationalize it (and hold whether or not `/codebase-design` is loaded).
+This is `/codebase-design`'s **"interface is the test surface"** principle: wanting to test _past_ the interface is a signal the module is the wrong shape — fix the interface, don't paper over it with a mock. The testability rules below operationalize it (and hold whether or not `/codebase-design` is loaded).
 
 ## Anti-Pattern: Horizontal Slices
 
@@ -48,7 +46,7 @@ RIGHT (vertical):
 
 ## Workflow
 
-The spec's **Acceptance criteria** is your test list; the **Design**'s *Interface delta* is the public surface you test through. Work the behaviors in the spec's priority order, and honor **Scope** — don't touch what's listed Out.
+The spec's **Acceptance criteria** is your test list; the **Design**'s _Interface delta_ is the public surface you test through. Work the behaviors in the spec's priority order, and honor **Scope** — don't touch what's listed Out.
 
 **Design testable code as you go.** As you write each piece of minimal code, shape it for testability per `/codebase-design`'s three rules: **accept dependencies, don't create them**; **return results, don't produce side effects**; **keep the surface small**. Tests then fall out naturally instead of needing mocks. When `/codebase-design` isn't loaded, those three phrases are enough to apply.
 

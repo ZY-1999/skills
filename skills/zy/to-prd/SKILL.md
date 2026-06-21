@@ -26,7 +26,3 @@ Three templates, picked by the nature of the input:
 Architecture still publishes as `Type: prd` (a parent `/to-spec` decomposes into specs, same as a feature) — the difference from a feature PRD is framing and vocabulary, not issue type.
 
 When an orchestrator invokes this skill with an explicit type (`/improve-architecture` declares an architecture source), honor it. Otherwise infer from the conversation.
-
----
-
-Adapted from upstream `to-prd`: made **model-invoked** (no `disable-model-invocation`) so the SDD flow can orchestrate it, and the setup pointer resolves to `/setup-skills`. Extended beyond upstream to publish three parent types — feature `prd`, `bug`, and architecture-deepening `prd` — each from its own template in `references/`. The parent this produces is what `/to-spec` decomposes into `spec`s (each spec carries `Parent: #<this parent>`).

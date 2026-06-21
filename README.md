@@ -10,16 +10,16 @@
 - **新增** `zy/` 一桶；详见 [skills/zy/README.md](./skills/zy/README.md)。
 - **取代策略**：当某个 `zy/` skill 完整取代一个 upstream skill 时，从 `.claude-plugin/plugin.json` 注销该 upstream 条目（**文件保留**，保持可合并）。目前已注销：
 
-  | 已注销的 upstream skill | 取代它的 zy/ skill |
-  | --- | --- |
-  | `engineering/ask-matt` | [`/route`](./skills/zy/route/SKILL.md)（意图 → skill 路由器） |
-  | `engineering/setup-matt-pocock-skills` | [`/setup-skills`](./skills/zy/setup-skills/SKILL.md)（本地-only） |
-  | `engineering/to-prd` | [`/to-prd`](./skills/zy/to-prd/SKILL.md)（模型调用，可被编排） |
-  | `engineering/tdd` | [`/tdd`](./skills/zy/tdd/SKILL.md)（纯实现） |
-  | `engineering/to-issues` | [`/to-spec`](./skills/zy/to-spec/SKILL.md)（吸收其拆解职责） |
-  | `productivity/handoff` | [`/handoff`](./skills/zy/handoff/SKILL.md)（模型调用，输出下个会话启动 prompt） |
+  | 已注销的 upstream skill                     | 取代它的 zy/ skill                                                                                                                           |
+  | ------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
+  | `engineering/ask-matt`                      | [`/route`](./skills/zy/route/SKILL.md)（意图 → skill 路由器）                                                                                |
+  | `engineering/setup-matt-pocock-skills`      | [`/setup-skills`](./skills/zy/setup-skills/SKILL.md)（本地-only）                                                                            |
+  | `engineering/to-prd`                        | [`/to-prd`](./skills/zy/to-prd/SKILL.md)（模型调用，可被编排）                                                                               |
+  | `engineering/tdd`                           | [`/tdd`](./skills/zy/tdd/SKILL.md)（纯实现）                                                                                                 |
+  | `engineering/to-issues`                     | [`/to-spec`](./skills/zy/to-spec/SKILL.md)（吸收其拆解职责）                                                                                 |
+  | `productivity/handoff`                      | [`/handoff`](./skills/zy/handoff/SKILL.md)（模型调用，输出下个会话启动 prompt）                                                              |
   | `engineering/improve-codebase-architecture` | [`/improve-architecture`](./skills/zy/improve-architecture/SKILL.md)（架构发现 → SDD 入口；ICA 的 grilling 设计由 `/to-spec` + Gate A 替代） |
-  | `engineering/diagnosing-bugs` | [`/diagnose-bug`](./skills/zy/diagnose-bug/SKILL.md)（诊断循环 → 产出 `bug` 父项接力 SDD；保留 Phase 1-4 诊断纪律） |
+  | `engineering/diagnosing-bugs`               | [`/diagnose-bug`](./skills/zy/diagnose-bug/SKILL.md)（诊断循环 → 产出 `bug` 父项接力 SDD；保留 Phase 1-4 诊断纪律）                          |
 
 ## 安装
 
@@ -58,7 +58,6 @@ claude plugin install zy-skills@zy-skills
 **Engineering**（日常代码工作）
 
 - **[grill-with-docs](./skills/engineering/grill-with-docs/SKILL.md)** — grilling 会话，同时构建项目领域模型、打磨术语，并就地更新 `CONTEXT.md` 与 ADR。`（用户调用）`
-- **[triage](./skills/engineering/triage/SKILL.md)** — 把 issue 在一组 triage 角色的状态机里流转。`（用户调用）`
 - **[prototype](./skills/engineering/prototype/SKILL.md)** — 搭一个一次性原型来厘清设计（可运行终端程序，或可在一个路由上切换的几种 UI 变体）。`（用户调用）`
 - **[domain-modeling](./skills/engineering/domain-modeling/SKILL.md)** — 主动构建并打磨项目领域模型——用词汇表挑战术语、用边界场景压测、就地更新 `CONTEXT.md` 与 ADR。`（模型调用）`
 - **[codebase-design](./skills/engineering/codebase-design/SKILL.md)** — 设计深模块的共享纪律与词汇：大量行为藏在一个小接口后，放在干净的接缝处，可通过该接口测试。`（模型调用）`
@@ -72,17 +71,18 @@ claude plugin install zy-skills@zy-skills
 
 ### 本 fork 新增（zy/）
 
-围绕 SDD 流水线新增，10 个；每个都可在 [skills/zy/README.md](./skills/zy/README.md) 查看完整说明。
+围绕 SDD 流水线新增，11 个；每个都可在 [skills/zy/README.md](./skills/zy/README.md) 查看完整说明。
 
 - **[route](./skills/zy/route/SKILL.md)** — 意图 → skill 路由器：扫一眼你想做什么，拿到处理它的那一个 skill（或一条短链）。`（用户调用）`
 - **[setup-skills](./skills/zy/setup-skills/SKILL.md)** — 为 SDD skills 配置仓库（本地 markdown issue 追踪器、triage 标签、domain 文档、初始 CodeMap）；`setup-matt-pocock-skills` 的本地-only 改造版。`（用户调用）`
-- **[improve-architecture](./skills/zy/improve-architecture/SKILL.md)** — 扫描代码库寻找架构深化机会，以可视化 HTML 报告呈现候选并发布到 issue tracker；**只做发现不做设计**，跑 `/to-prd` 综合 PRD，过 SDD 的 Gate 0 后交接 `/sdd-flow` 从 spec 继续后续流程。`（用户调用）`
+- **[improve-architecture](./skills/zy/improve-architecture/SKILL.md)** — 扫描代码库寻找架构深化机会，以可视化 HTML 报告呈现候选并发布到 issue tracker；**只做发现不做设计**，跑 `/to-prd` 综合 Top recommendation 的 PRD，其余独立候选作为 `needs-info` 草稿落 issue tracker。`（用户调用）`
 - **[diagnose-bug](./skills/zy/diagnose-bug/SKILL.md)** — 顽固 bug 与性能回归的纪律化诊断循环：构建反馈循环 → 复现最小化 → 假设 → 插桩锁定根因，然后把诊断交给 `/to-prd` 产出 `Type: bug` 父项（接力 `/to-spec`→`/tdd`）。`（模型调用）`
 - **[to-prd](./skills/zy/to-prd/SKILL.md)** — 把当前对话综合成父项 issue 并发布到 issue 追踪器（不访谈，只综合）：feature → `prd`、bug → `bug`、架构深化 → `prd`（architecture 模板）。`（模型调用）`
 - **[to-spec](./skills/zy/to-spec/SKILL.md)** — 把 PRD / bug / 已 grilled 对话拆成 `spec`：原子、规划完备的单元，一个 spec = 一次 `/tdd` 会话。`（模型调用）`
 - **[tdd](./skills/zy/tdd/SKILL.md)** — 用 red-green-refactor 实现一个规划完备的 spec（纯实现，无 planning 步骤）。`（模型调用）`
 - **[codemap](./skills/zy/codemap/SKILL.md)** — 生成、更新或 drift-check agent 可读的 CodeMap（渐进式代码地形索引）。`（模型调用）`
-- **[sdd-flow](./skills/zy/sdd-flow/SKILL.md)** — 端到端 SDD 编排器：grill → prd → spec → build → review → maintain，串接各阶段、管 git 检查点与人工关卡（spec 质量审查归 `/to-spec`，不归本 skill）。`（模型调用）`
+- **[idea-to-prd](./skills/zy/idea-to-prd/SKILL.md)** — SDD 流水线前半段 + 端到端入口：从想法/需求出发，grill 对齐设计 → 综合 PRD → 人审 Gate 0，然后接力 `/sdd-flow` 走完后续。只负责 grill + PRD + Gate 0，不碰 git（分支在 `/sdd-flow` 入口、PRD 获批后才落地）。`（模型调用）`
+- **[sdd-flow](./skills/zy/sdd-flow/SKILL.md)** — SDD 流水线后半段：从已批准的 PRD 到交付（spec → build → review → maintain）。入口建 `feature/<slug>`/`bugfix/<slug>` 分支并提交 PRD（SDD 承诺点），然后 `/to-spec` 拆解、`/tdd` 逐个实现、`/review` 复核、维护文档；spec 质量归 `/to-spec`。承接 `/idea-to-prd`（Gate 0 后）、`/diagnose-bug` 或手写 PRD。`（模型调用）`
 - **[handoff](./skills/zy/handoff/SKILL.md)** — 把当前对话压缩成 OS 临时目录的 handoff 文件，并输出一条可直接粘贴的下个会话启动 prompt（「请阅读文件 <path> 然后继续 <action>」）。`（模型调用）`
 
 ### 其它

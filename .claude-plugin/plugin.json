@@ -2,7 +2,6 @@
   "name": "zy-skills",
   "skills": [
     "./skills/engineering/grill-with-docs",
-    "./skills/engineering/triage",
     "./skills/engineering/prototype",
     "./skills/engineering/domain-modeling",
     "./skills/engineering/codebase-design",
@@ -14,6 +13,7 @@
     "./skills/zy/to-spec",
     "./skills/zy/codemap",
     "./skills/zy/tdd",
+    "./skills/zy/idea-to-prd",
     "./skills/zy/sdd-flow",
     "./skills/zy/handoff",
     "./skills/productivity/grill-me",

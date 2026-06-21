@@ -40,7 +40,7 @@ How the deepening is verified:
 
 ## Out of Scope
 
-Candidates from the report that are independent — different module, different problem, each shippable alone. They stay in the report for a later scan. Do not fold them in.
+Candidates from the report that are independent — different module, different problem, each shippable alone. Do not fold them in. When this PRD comes from `/improve-architecture`, those candidates are published as separate `needs-info` `prd` drafts (one feature folder each) for later review — they don't stay marooned in `architecture-review.html`.
 
 ## Further Notes
 

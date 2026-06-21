@@ -51,7 +51,7 @@ Repo name, date, and a compact legend: solid box = module, dashed line = seam, r
 
 The diagrams carry the weight. Prose is sparse, plain, and uses the glossary terms (from the `/codebase-design` skill) without ceremony.
 
-Each candidate is one `<article>`:
+Each candidate is one `<article>` with an `id` (kebab-case of the title) so the Top-recommendation link and the Step 3b backlog drafts' _Further Notes_ can anchor back to it:
 
 - **Title** — short, names the deepening (e.g. "Collapse the Order intake pipeline").
 - **Badge row** — recommendation strength (`Strong` = emerald, `Worth exploring` = amber, `Speculative` = slate), plus a tag for the dependency category (`in-process`, `local-substitutable`, `ports & adapters`, `mock`).

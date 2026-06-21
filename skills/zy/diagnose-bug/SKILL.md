@@ -113,7 +113,9 @@ End of Phase 4: **one hypothesis confirmed**, the rest falsified.
 
 The diagnosis is the deliverable — you do **not** fix here. Hand it to `/to-prd`, which reads the conversation — the minimised repro, the confirmed root cause, the captured symptom, the impact, and the seam a regression test should live at — and publishes a `Type: bug` parent.
 
-Before handing off, clean up the diagnosis's temporary artifacts: remove all `[DEBUG-...]` instrumentation (`grep` the prefix) and delete throwaway harnesses/scripts — unless the Phase 1 feedback loop is itself a clean failing test `/to-spec` can adopt as the regression seam, in which case leave it and call it out.
+Once `/to-prd` publishes the `bug`, continue the SDD pipeline from it — invoke `/sdd-flow` to ship the fix end-to-end (spec → build → review → maintain).
+
+Before handing off, clean up the diagnosis's temporary artifacts: remove all `[DEBUG-...]` instrumentation (`grep` the prefix) and delete throwaway harnesses/scripts — unless the Phase 1 feedback loop is itself a clean failing test `/to-spec` can adopt as the regression seam, in which case leave it and record it.
 
 ### Architectural hand-off (optional)
 

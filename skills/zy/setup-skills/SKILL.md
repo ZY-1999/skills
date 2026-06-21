@@ -45,7 +45,7 @@ Summarise what's present and what's missing, then present the **defaults for all
 
 The defaults:
 
-- **Issue tracker** — local markdown under `.scratch/` at the repo root. (Issues are the carrier for `spec`/`prd`/`bug`; `/to-spec` and `/triage` read/write here. See [issue-tracker-local.md](./references/issue-tracker-local.md).)
+- **Issue tracker** — local markdown under `.scratch/` at the repo root. (Issues are the carrier for `spec`/`prd`/`bug`; `/to-prd`, `/to-spec`, and `/tdd` read/write here. See [issue-tracker-local.md](./references/issue-tracker-local.md).)
 - **Triage labels** — each canonical role's string equals its name (`needs-triage`, `needs-info`, `ready-for-agent`, `ready-for-human`, `wontfix`). See [triage-labels.md](./references/triage-labels.md).
 - **Domain docs** — single-context: one `CONTEXT.md` + `docs/adr/` at the repo root. Read by `/grill-with-docs`, `/tdd`, etc.
 - **CodeMap** — build the project-level map across the whole repo via `/codemap`. Feeds `/to-spec`'s terrain step.

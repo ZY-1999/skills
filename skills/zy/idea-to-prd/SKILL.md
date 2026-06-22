@@ -66,6 +66,6 @@ Do not hand off until the human approves.
 ## When NOT to use this skill
 
 - You already have an approved PRD on disk → `/sdd-flow` directly (it owns everything after Gate 0).
-- The PRD comes from an architecture scan → start with `/improve-architecture` (it scans, publishes a Top PRD + backlog drafts as `needs-info`, and stops). To pursue one of those drafts, bring it back here — `/idea-to-prd` completes it (mode 2) → Gate 0 → `/sdd-flow`.
+- The PRD comes from an architecture scan → start with `/improve-architecture` (it scans, publishes every candidate as a `needs-info` draft — Top included — and stops). To pursue one of those drafts, bring it back here — `/idea-to-prd` completes it (mode 2) → Gate 0 → `/sdd-flow`.
 - One-off fix or trivial change → just `/tdd` or `/diagnose-bug` directly.
 - The repo hasn't run `/setup-skills` → run that first.

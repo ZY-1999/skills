@@ -75,7 +75,7 @@ claude plugin install zy-skills@zy-skills
 
 - **[route](./skills/zy/route/SKILL.md)** — 意图 → skill 路由器：扫一眼你想做什么，拿到处理它的那一个 skill（或一条短链）。`（用户调用）`
 - **[setup-skills](./skills/zy/setup-skills/SKILL.md)** — 为 SDD skills 配置仓库（本地 markdown issue 追踪器、triage 标签、domain 文档、初始 CodeMap）；`setup-matt-pocock-skills` 的本地-only 改造版。`（用户调用）`
-- **[improve-architecture](./skills/zy/improve-architecture/SKILL.md)** — 扫描代码库寻找架构深化机会，以可视化 HTML 报告呈现候选并发布到 issue tracker；**只做发现不做设计**，跑 `/to-prd` 综合 Top recommendation 的 PRD，其余独立候选作为 `needs-info` 草稿落 issue tracker。`（用户调用）`
+- **[improve-architecture](./skills/zy/improve-architecture/SKILL.md)** — 扫描代码库寻找架构深化机会，以可视化 HTML 报告呈现候选并发布到 issue tracker；**只做发现不做设计**（不跑 `/to-prd` 综合），每个候选（含 Top recommendation）直接作为 `needs-info` 轻量草稿落 issue tracker，留待 `/idea-to-prd` 完善。`（用户调用）`
 - **[diagnose-bug](./skills/zy/diagnose-bug/SKILL.md)** — 顽固 bug 与性能回归的纪律化诊断循环：构建反馈循环 → 复现最小化 → 假设 → 插桩锁定根因，然后把诊断交给 `/to-prd` 产出 `Type: bug` 父项（接力 `/to-spec`→`/tdd`）。`（模型调用）`
 - **[to-prd](./skills/zy/to-prd/SKILL.md)** — 把当前对话综合成父项 issue 并发布到 issue 追踪器（不访谈，只综合）：feature → `prd`、bug → `bug`、架构深化 → `prd`（architecture 模板）。`（模型调用）`
 - **[to-spec](./skills/zy/to-spec/SKILL.md)** — 把 PRD / bug / 已 grilled 对话拆成 `spec`：原子、规划完备的单元，一个 spec = 一次 `/tdd` 会话。`（模型调用）`

@@ -21,14 +21,6 @@
   | `engineering/improve-codebase-architecture` | [`/improve-architecture`](./skills/zy/improve-architecture/SKILL.md)（架构发现 → SDD 入口；ICA 的 grilling 设计由 `/to-spec` + Gate A 替代） |
   | `engineering/diagnosing-bugs`               | [`/diagnose-bug`](./skills/zy/diagnose-bug/SKILL.md)（诊断循环 → 产出 `bug` 父项接力 SDD；保留 Phase 1-4 诊断纪律）                          |
 
-## 安装
-
-```bash
-npx skills@latest add mattpocock/skills
-```
-
-挑选所需 skill（务必选 `/setup-skills`），再在 agent 里运行 `/setup-skills` 配置仓库：本地 markdown issue 追踪器、triage 标签、domain 文档布局、以及一份初始的项目级 CodeMap。
-
 ## 作为 Claude Code plugin 安装
 
 本仓库同时是一个 Claude Code plugin marketplace（见 [.claude-plugin/marketplace.json](./.claude-plugin/marketplace.json)），可整体作为一个 plugin 安装，skill 命名空间为 `zy-skills:`。

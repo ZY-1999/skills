@@ -21,7 +21,7 @@ prd(approved) → spec → [Gate A] → tdd(per spec) → review → summarize
 The PRD is approved but git hasn't committed to the feature yet. At entry:
 
 1. **If not already on a `feature/<slug>` or `bugfix/<slug>` branch**, create and switch to one named by work type and slug. `<slug>` is the feature/bug name already used for the `.scratch/<YYYY-MM-DD>-<slug>/` tracker folder.
-2. **Commit the PRD** (and, if they came from grilling, the `CONTEXT.md` / ADR changes) onto the branch as the first commit — everything the human just signed off on at Gate 0.
+2. **Commit the PRD** (and, if they came from grilling, the `CONTEXT.md` / ADR changes) onto the branch as the first commit — everything the human just signed off on at Gate 0. **Flip the PRD's status to `ready-for-agent`** — this is the only skill that sets `ready-for-agent`; the flip marks the PRD as human-approved and now entering agent execution.
 
 This is **git checkpoint 1** — the only place this flow creates a branch. Commit messages reference the issue slug. If the repo has a commit-message or pre-commit convention, follow it.
 
@@ -38,14 +38,14 @@ Gate A fires **after** Stage 1 has already published the specs to the issue trac
 
 ### 1. Specs — `/to-spec`
 
-Decompose the approved PRD into planning-complete specs (each one = one `/tdd` session) via `/to-spec`. `/to-spec` self-vets the decomposition through best-of-N + judge, lands every skeleton, then designs each one (directly by default, DESIGN-IT-TWICE for the complex ones) — so when it returns, the specs are on disk in the issue tracker, fully designed, `ready-for-agent`.
+Decompose the approved PRD into planning-complete specs (each one = one `/tdd` session) via `/to-spec`. `/to-spec` self-vets the decomposition through best-of-N + judge, lands every skeleton, then designs each one (directly by default, DESIGN-IT-TWICE for the complex ones) — so when it returns, the specs are on disk in the issue tracker, fully designed, `ready-for-human` (awaiting Gate A).
 
 ### Gate A — human reviews the spec breakdown
 
 The specs are already on disk (Stage 1 published them in dependency order to the issue tracker). Point the user at those files and have them review them directly — don't re-paste the breakdown in chat. Ask: **"Specs look right → start building? Or redo the breakdown?"**
 
 - **Redo** → back to Stage 1 with the user's feedback.
-- **Approve** → commit the spec files (git checkpoint 2), then Stage 2.
+- **Approve** → flip every spec `ready-for-human` → `ready-for-agent` (the only skill that sets `ready-for-agent`), commit the spec files (git checkpoint 2), then Stage 2.
 
 ### 2. Build — `/tdd` per spec, in dependency order
 

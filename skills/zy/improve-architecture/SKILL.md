@@ -70,12 +70,13 @@ Every draft, regardless of folder, is built the same way:
 
 ### 4. Confirm the drafts are `needs-info`, then tell the user
 
-Step 3 already wrote every draft as `needs-info` — there's no `/to-prd` run to override and no `ready-for-agent` default to fight. improve-architecture runs no gate; `needs-info` ("waiting on your review + the gaps `/idea-to-prd` will grill") is the honest state for unvetted discovery output.
+Step 3 already wrote every draft as `needs-info` — there's no `/to-prd` run, so nothing to override. improve-architecture runs no gate; `needs-info` ("waiting on your review + the gaps `/idea-to-prd` will grill") is the honest state for unvetted discovery output.
+
 Then tell the user, in chat:
 
 - the scan's feature folder path (where `architecture-review.html` + the Top draft live),
 - each independent candidate draft's feature folder path,
-- the next move is theirs: run `/idea-to-prd` on any draft — it grills the gaps, flips `needs-info` → `ready-for-agent`, and runs Gate 0 (mode 2), then hands off to `/sdd-flow`.
+- the next move is theirs: run `/idea-to-prd` on any draft — it grills the gaps, flips `needs-info` → `ready-for-human`.
 
 ## When NOT to use this skill
 

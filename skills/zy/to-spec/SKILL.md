@@ -79,7 +79,7 @@ Is each spec's design deep enough? Judge the design against:
 
 </design-bar>
 
-Either way the design must clear the **design bar** above. `/codebase-design` is this step's vocabulary and principles — when loaded, lean on its patterns: **DESIGN-IT-TWICE** for genuine complexity and **DEEPENING** for the deep-module note. When done, write it into the file and flip `Status: needs-design` → `ready-for-agent`.
+Either way the design must clear the **design bar** above. `/codebase-design` is this step's vocabulary and principles — when loaded, lean on its patterns: **DESIGN-IT-TWICE** for genuine complexity and **DEEPENING** for the deep-module note. When done, write it into the file and flip `Status: needs-design` → `ready-for-human` (complete spec, awaiting Gate A review).
 
 Use the project glossary vocabulary in titles and bodies. Do NOT close or modify the parent PRD/bug issue.
 
@@ -99,4 +99,4 @@ The agent that just designed the specs can't grade its own work. Fan out **two i
 
 > **Trivial case** — single spec, or specs with no shared surface and no cross-spec coupling: drop Sub-agent B and run its check inline; keep A (coverage always matters).
 
-If either sub-agent returns defects, loop back — add/merge/split specs (step 3) or refine a design (step 5) — and re-run the affected sub-agent. When both return PASS, all specs are `ready-for-agent`; point the user at the spec files in the issue tracker as the ground truth (don't re-paste them in chat).
+If either sub-agent returns defects, loop back — add/merge/split specs (step 3) or refine a design (step 5) — and re-run the affected sub-agent. When both return PASS, all specs are `ready-for-human` (awaiting Gate A); point the user at the spec files in the issue tracker as the ground truth (don't re-paste them in chat).

@@ -15,7 +15,7 @@ The issue tracker and triage label vocabulary should already be configured — r
 
 Check with the user that these seams match their expectations.
 
-3. Pick the template that matches what you're publishing, fill it from the conversation (no interviewing — synthesize what you already discussed), then publish it to the project issue tracker. Apply the `ready-for-agent` triage label - no need for additional triage.
+3. Pick the template that matches what you're publishing, fill it from the conversation (no interviewing — synthesize what you already discussed), then publish it to the project issue tracker. Apply the `ready-for-human` triage label (complete PRD, awaiting Gate 0 review) - no need for additional triage.
 
 Three templates, picked by the nature of the input:
 

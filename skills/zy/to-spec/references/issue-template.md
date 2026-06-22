@@ -1,7 +1,7 @@
 # <Spec title>
 
 Type: spec
-Status: needs-design # → ready-for-agent once step 5 design is filled in
+Status: needs-design # → ready-for-human once step 5 design is filled in (awaiting Gate A review)
 Parent: #<prd-or-bug-issue-number> # omit if the source was a grilled conversation
 Blocked by: #<n> # or "None — can start immediately"
 

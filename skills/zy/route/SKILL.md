@@ -14,7 +14,7 @@ Scan the **intent** below; run the skill on the right. One question → one skil
 
 - **Start from an architecture scan** → `/improve-architecture`
 - **Ship end-to-end, hands-off** → `/idea-to-prd`
-- **I have an incomplete PRD draft** → `/idea-to-prd`
+- **I have an incomplete PRD draft(status = 'needs-info')** → `/idea-to-prd`
 - **Drive it myself, I have a codebase** → `/grill-with-docs` → `/to-prd` → `/sdd-flow`
 - **Drive it myself, no codebase** → `/grill-me` → `/to-prd` → `/sdd-flow`
 - **I already have an approved PRD, ship it** → `/sdd-flow`

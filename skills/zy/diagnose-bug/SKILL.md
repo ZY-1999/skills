@@ -111,7 +111,7 @@ End of Phase 4: **one hypothesis confirmed**, the rest falsified.
 
 ## Phase 5 — Hand off to `/to-prd`
 
-The diagnosis is the deliverable — you do **not** fix here. Hand it to `/to-prd`, which reads the conversation — the minimised repro, the confirmed root cause, the captured symptom, the impact, and the seam a regression test should live at — and publishes a `Type: bug` parent.
+The diagnosis is the deliverable — you do **not** fix here. Hand it to `/to-prd`.
 
 Once `/to-prd` publishes the `bug`, continue the SDD pipeline from it — invoke `/sdd-flow` to ship the fix end-to-end (spec → build → review → maintain).
 

@@ -50,9 +50,9 @@ If the user arrives already-grilled (the conversation carries a resolved design)
 
 ### 2. PRD — `/to-prd`
 
-Synthesize the PRD from the grilled context (no interview — `/to-prd` forbids it). `/to-prd` sketches test seams and confirms them with the user, then publishes the PRD to the issue tracker tagged `ready-for-human` (complete PRD, awaiting Gate 0). It picks the template by input nature — feature `prd`, bug `bug`, or architecture-deepening `prd`.
+Synthesize the PRD from the grilled context (no interview — `/to-prd` forbids it).
 
-**Mode 2 alt — update in place, don't re-synthesise.** The PRD already exists on disk — don't run `/to-prd` to synthesise a fresh one (it would overwrite the draft). Instead, fold the grilled gap-fills straight into the existing PRD file: fill the empty sections, sharpen the thin ones, and flip its status `needs-info` → `ready-for-human` (now complete, awaiting Gate 0).
+**Mode 2 alt — update in place, don't re-synthesise.** The PRD already exists on disk — don't re-run `/to-prd`'s synthesis (steps 1-3) for a fresh draft; it would overwrite. Instead, fold the grill's output straight into the existing PRD file: **fill the empty sections** and **cut what the grill overturned** (claims, directions, or over-confident assertions the gap-fill just falsified). Then run `/to-prd`'s adversarial review (step 4 — fresh-context sub-agent, veracity first) on the updated draft; on PASS, flip its status `needs-info` → `ready-for-human` (now complete, awaiting Gate 0).
 
 ### Gate 0 — human reviews the PRD
 

@@ -41,7 +41,7 @@ Look at the current repo to understand its starting state. Read whatever exists;
 
 ### 2. Present the plan (defaults applied)
 
-Summarise what's present and what's missing, then present the **defaults for all four items in one list** — don't walk through them one at a time. State that you'll apply these unless the user objects, and ask only for exceptions.
+Summarise what's present and what's missing, then present the **defaults for all five items in one list** — don't walk through them one at a time. State that you'll apply these unless the user objects, and ask only for exceptions.
 
 The defaults:
 
@@ -49,6 +49,7 @@ The defaults:
 - **Triage labels** — each canonical role's string equals its name (`needs-triage`, `needs-info`, `ready-for-agent`, `ready-for-human`, `wontfix`). See [triage-labels.md](./references/triage-labels.md).
 - **Domain docs** — single-context: one `CONTEXT.md` + `docs/adr/` at the repo root. Read by `/grill-with-docs`, `/tdd`, etc.
 - **CodeMap** — build the project-level map across the whole repo via `/codemap`. Feeds `/to-spec`'s terrain step.
+- **Git contract** — deploy [git-contract.md](./references/git-contract.md) to `docs/agents/git-contract.md`. Branch strategy defaults to **solo** (develop on the current branch); pick **feature-branch** (`feature/<slug>`/`bugfix/<slug>`) when the work needs isolation. The contract also carries commit-message conventions; `/sdd-flow` and `/tdd` follow it for commits and branch decisions.
 
 Raise a section as a question **only if** the repo's actual state contradicts the default — e.g. a monorepo needs multi-context (`CONTEXT-MAP.md` + per-context `CONTEXT.md` files), issues already live somewhere other than `.scratch/`, or the repo is too large/trivial for a CodeMap (or `/codemap` isn't installed). Otherwise proceed with the defaults.
 
@@ -57,7 +58,8 @@ Raise a section as a question **only if** the repo's actual state contradicts th
 Show the user a draft of:
 
 - The `## Agent skills` block to add to whichever of `CLAUDE.md` / `AGENTS.md` is being edited (see step 4 for selection rules)
-- The contents of `docs/agents/issue-tracker.md`, `docs/agents/triage-labels.md`, `docs/agents/domain.md`
+- The contents of `docs/agents/issue-tracker.md`, `docs/agents/triage-labels.md`, `docs/agents/domain.md`, `docs/agents/git-contract.md`
+- **Two decisions for the git contract** — (1) branch strategy: solo or feature-branch; (2) this repo's commit-message conventions (conventional-commits prefix, sign-off, issue key, …), or "none". The `git-contract.md` draft reflects both — keep only the chosen branch-strategy mode and fill the conventions line.
 
 Let them edit before writing.
 
@@ -93,13 +95,18 @@ The block:
 ### CodeMap
 
 [one-line summary — start here when exploring the codebase: a project-level terrain index under `docs/codemap/`; refresh or add feature maps via `/codemap`; when unsure whether a map is still trustworthy, run `/codemap` drift-check — if it reports drift, update the affected map].
+
+### Git contract
+
+[one-line summary — active branch strategy (solo or feature-branch) + commit-message conventions; `/sdd-flow` and `/tdd` follow it for commits and branch decisions]. See `docs/agents/git-contract.md`.
 ```
 
-Then write the three docs files using the seed templates in this skill folder as a starting point:
+Then write the four docs files using the seed templates in this skill folder as a starting point:
 
 - [issue-tracker-local.md](./references/issue-tracker-local.md) — local-markdown issue tracker
 - [triage-labels.md](./references/triage-labels.md) — label mapping
 - [domain.md](./references/domain.md) — domain doc consumer rules + layout
+- [git-contract.md](./references/git-contract.md) — git workflow contract. **Finalise on deploy**: keep only the chosen branch-strategy mode (delete the other, drop the `<Pick one…>` placeholder) and fill the Commit-messages repo-conventions line. `/sdd-flow` and `/tdd` read the deployed `docs/agents/git-contract.md`.
 
 Then build the project-level CodeMap: run `/codemap` in **project** mode to generate `docs/codemap/project.md`. Feature maps are added later as work needs them — not during setup. (Skip if `/codemap` isn't installed.)
 

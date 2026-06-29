@@ -79,7 +79,7 @@ Is each spec's design deep enough? Judge the design against:
 
 </design-bar>
 
-Either way the design must clear the **design bar** above. `/codebase-design` is this step's vocabulary and principles — when loaded, lean on its patterns: **DESIGN-IT-TWICE** for genuine complexity and **DEEPENING** for the deep-module note. When done, write it into the file and flip `Status: needs-design` → `ready-for-human` (complete spec, awaiting Gate A review).
+Either way the design must clear the **design bar** above. `/codebase-design` is this step's vocabulary and principles — when loaded, lean on its patterns: **DESIGN-IT-TWICE** for genuine complexity and **DEEPENING** for the deep-module note.
 
 Use the project glossary vocabulary in titles and bodies. Do NOT close or modify the parent PRD/bug issue.
 

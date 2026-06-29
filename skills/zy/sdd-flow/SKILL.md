@@ -1,6 +1,6 @@
 ---
 name: sdd-flow
-description: Drive a feature from an approved PRD to shipped — the back half of the Spec-Driven Development pipeline: spec → build → review → doc maintenance. Entry point creates the feature branch and commits the PRD (the SDD commitment point), then decomposes the PRD into specs via /to-spec, builds each via /tdd, reviews, and maintains docs.
+description: Drive a feature from an approved PRD to shipped — the back half of the Spec-Driven Development pipeline: spec → build → review → doc maintenance. Decomposes the PRD into specs via /to-spec, builds each via /tdd, reviews, and maintains docs.
 ---
 
 # SDD Flow (PRD → ship)
@@ -16,23 +16,13 @@ prd(approved) → spec → [Gate A] → tdd(per spec) → review → summarize
                       ↑ redo
 ```
 
-## Entry — create the branch, commit the PRD
+## Entry — flip the PRD to ready-for-agent
 
-The PRD is approved but git hasn't committed to the feature yet. At entry:
+At entry, **flip the PRD's status to `ready-for-agent`** — this is the only skill that sets `ready-for-agent`; the flip marks the PRD as human-approved and now entering agent execution.
 
-1. **If not already on a `feature/<slug>` or `bugfix/<slug>` branch**, create and switch to one named by work type and slug. `<slug>` is the feature/bug name already used for the `.scratch/<YYYY-MM-DD>-<slug>/` tracker folder.
-2. **Commit the PRD** (and, if they came from grilling, the `CONTEXT.md` / ADR changes) onto the branch as the first commit — everything the human just signed off on at Gate 0. **Flip the PRD's status to `ready-for-agent`** — this is the only skill that sets `ready-for-agent`; the flip marks the PRD as human-approved and now entering agent execution.
+## Commit the work
 
-This is **git checkpoint 1** — the only place this flow creates a branch. Commit messages reference the issue slug. If the repo has a commit-message or pre-commit convention, follow it.
-
-## Human gate — review the file, not the chat
-
-Gate A fires **after** Stage 1 has already published the specs to the issue tracker — the spec files are on disk before the gate runs. So:
-
-- **Don't re-paste or summarize the specs in chat.** Chat coordinates; the files are the ground truth.
-- **Point the user at the spec files** in dependency order — give the exact paths; the user reviews the landed files in their editor.
-- **In-file edits count as approved feedback.** If the user edits a spec while reviewing, fold those edits in (re-run the affected part of `/to-spec`'s best-of-N loop against the edited file).
-- Then ask the gate question and wait.
+Commit the current work product now — the published PRD, plus any `CONTEXT.md` / ADR edits the session produced. For what to stage, message conventions, and whether to commit, follow the [Git Contract](docs/agents/git-contract.md).
 
 ## Stages
 
@@ -45,7 +35,7 @@ Decompose the approved PRD into planning-complete specs (each one = one `/tdd` s
 The specs are already on disk (Stage 1 published them in dependency order to the issue tracker). Point the user at those files and have them review them directly — don't re-paste the breakdown in chat. Ask: **"Specs look right → start building? Or redo the breakdown?"**
 
 - **Redo** → back to Stage 1 with the user's feedback.
-- **Approve** → flip every spec `ready-for-human` → `ready-for-agent` (the only skill that sets `ready-for-agent`), commit the spec files (git checkpoint 2), then Stage 2.
+- **Approve** → flip every spec `ready-for-human` → `ready-for-agent`.Commit the current work product now — the landed spec skeletons and their designs. For what to stage, message conventions, and whether to commit, follow the [Git Contract](docs/agents/git-contract.md), then Stage 2.
 
 ### 2. Build — `/tdd` per spec, in dependency order
 
@@ -53,8 +43,7 @@ For each approved spec whose blockers are done:
 
 1. Pick the next unblocked spec (read the tracker's status/labels if unclear).
 2. Run `/tdd` — red-green-refactor, one vertical slice per tracer bullet. The spec already carries the interface and prioritized behaviors, so `/tdd` starts straight at red-green (no separate planning step).
-3. Commit the spec's code + tests + status change as one commit (git checkpoint 3). `/tdd` already flipped the status in its Close step — this just commits it.
-4. Next spec.
+3. Next spec.
 
 Continue until every approved spec is built.
 

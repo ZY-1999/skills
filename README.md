@@ -28,7 +28,7 @@
 **本地路径（开发/测试）：**
 
 ```bash
-claude plugin marketplace add .
+claude plugin marketplace add ./
 claude plugin install zy-skills@zy-skills
 ```
 
@@ -73,8 +73,8 @@ claude plugin install zy-skills@zy-skills
 - **[to-spec](./skills/zy/to-spec/SKILL.md)** — 把 PRD / bug / 已 grilled 对话拆成 `spec`：原子、规划完备的单元，一个 spec = 一次 `/tdd` 会话。`（模型调用）`
 - **[tdd](./skills/zy/tdd/SKILL.md)** — 用 red-green-refactor 实现一个规划完备的 spec（纯实现，无 planning 步骤）。`（模型调用）`
 - **[codemap](./skills/zy/codemap/SKILL.md)** — 生成、更新或 drift-check agent 可读的 CodeMap（渐进式代码地形索引）。`（模型调用）`
-- **[idea-to-prd](./skills/zy/idea-to-prd/SKILL.md)** — SDD 流水线前半段 + 端到端入口：从想法/需求出发，grill 对齐设计 → 综合 PRD → 人审 Gate 0，然后接力 `/sdd-flow` 走完后续。只负责 grill + PRD + Gate 0，不碰 git（分支在 `/sdd-flow` 入口、PRD 获批后才落地）。`（模型调用）`
-- **[sdd-flow](./skills/zy/sdd-flow/SKILL.md)** — SDD 流水线后半段：从已批准的 PRD 到交付（spec → build → review → maintain）。入口建 `feature/<slug>`/`bugfix/<slug>` 分支并提交 PRD（SDD 承诺点），然后 `/to-spec` 拆解、`/tdd` 逐个实现、`/review` 复核、维护文档；spec 质量归 `/to-spec`。承接 `/idea-to-prd`（Gate 0 后）、`/diagnose-bug` 或手写 PRD。`（模型调用）`
+- **[idea-to-prd](./skills/zy/idea-to-prd/SKILL.md)** — SDD 流水线前半段 + 端到端入口：从想法/需求出发，grill 对齐设计 → 综合 PRD → 人审 Gate 0，然后接力 `/sdd-flow` 走完后续。只负责 grill + PRD + Gate 0，不碰 git。`（模型调用）`
+- **[sdd-flow](./skills/zy/sdd-flow/SKILL.md)** — SDD 流水线后半段：从已批准的 PRD 到交付（spec → build → review → maintain）。入口把 PRD 翻转为 `ready-for-agent`，然后 `/to-spec` 拆解、`/tdd` 逐个实现、`/review` 复核、维护文档；spec 质量归 `/to-spec`。承接 `/idea-to-prd`（Gate 0 后）、`/diagnose-bug` 或手写 PRD。`（模型调用）`
 - **[handoff](./skills/zy/handoff/SKILL.md)** — 把当前对话压缩成 OS 临时目录的 handoff 文件，并输出一条可直接粘贴的下个会话启动 prompt（「请阅读文件 <path> 然后继续 <action>」）。`（模型调用）`
 
 ### 其它

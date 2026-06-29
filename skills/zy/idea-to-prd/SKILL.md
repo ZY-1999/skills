@@ -40,7 +40,7 @@ If the user points at a PRD file whose status is `needs-info` or whose required 
 
 ### 1. Grill — `/grilling` + `/domain-modeling`
 
-No branch yet — the grill writes `CONTEXT.md` / ADRs into the working tree uncommitted. The branch lands at `/sdd-flow`'s entry once the PRD is approved.
+No branch is created here — the grill writes `CONTEXT.md` / ADRs into the working tree uncommitted.
 
 Run a `/grilling` session, using the `/domain-modeling` skill — interview the user one question at a time until the plan is fully resolved, sharpening terminology and updating `CONTEXT.md` and ADRs inline as you go.
 

@@ -44,6 +44,10 @@ RIGHT (vertical):
   ...
 ```
 
+## Before Workflow
+
+Read the [Git Contract](docs/agents/git-contract.md) branch strategy. If the active mode is feature-branch, confirm you're on the right branch (idempotent — don't re-create it each spec); if solo, there's nothing to do.
+
 ## Workflow
 
 The spec's **Acceptance criteria** is your test list; the **Design**'s _Interface delta_ is the public surface you test through. Work the behaviors in the spec's priority order, and honor **Scope** — don't touch what's listed Out.
@@ -92,11 +96,11 @@ After all tests pass, look for refactor candidates:
 
 ### 4. Maintain the codemap
 
-If `/codemap` is loaded and the spec touched an area a `docs/codemap/` map covers, run `/codemap` **drift-check** against that map once the implementation is GREEN — if it reports drift, update the affected map. Skip when `/codemap` isn't loaded or no map covers the area. Do this before closing the spec, so any map update lands in the same commit as the code.
+If `/codemap` is loaded and the spec touched an area a `docs/codemap/` map covers, run `/codemap` **drift-check** against that map once the implementation is GREEN — if it reports drift, update the affected map. Skip when `/codemap` isn't loaded or no map covers the area. Do this before closing the spec, so the map stays current with the code.
 
 ### 5. Close the spec
 
-With every behavior in the spec's **Acceptance criteria** GREEN, refactor done, and the codemap current, flip the spec file's `Status: ready-for-agent` → `ready-for-human` (or `closed`, per the tracker) so triage and the next stage know it's implemented.
+With every behavior in the spec's **Acceptance criteria** GREEN, refactor done, and the codemap current, flip the spec file's `Status: ready-for-agent` → `ready-for-human` (or `closed`, per the tracker) so triage and the next stage know it's implemented. Commit the work. For what to stage, message conventions, and whether to commit, follow the [Git Contract](docs/agents/git-contract.md).
 
 ## Checklist Per Cycle
 

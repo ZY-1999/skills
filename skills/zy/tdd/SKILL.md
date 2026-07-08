@@ -100,7 +100,11 @@ If `/codemap` is loaded and the spec touched an area a `docs/codemap/` map cover
 
 ### 5. Close the spec
 
-With every behavior in the spec's **Acceptance criteria** GREEN, refactor done, and the codemap current, flip the spec file's `Status: ready-for-agent` → `ready-for-human` (or `closed`, per the tracker) so triage and the next stage know it's implemented. Commit the work. For what to stage, message conventions, and whether to commit, follow the [Git Contract](docs/agents/git-contract.md).
+With every behavior in the spec's **Acceptance criteria** GREEN, refactor done, and the codemap current:
+
+1. **Flip** the spec file's `Status: ready-for-agent` → `ready-for-human` (or `closed`, per the tracker) so triage and the next stage know it's implemented.
+2. **Append an evidence comment** to the spec file (below `## Rework on failure`; format documented in `/to-spec`'s issue template) — for each acceptance criterion, the test that proves it (file + name), the test command and pass/fail tally, and the commit from step 2. Pointers only — no narration, no source pasting (same stale-proof rule codemaps use). Stage this edit with the next commit, or amend it into step 2's if not yet pushed.
+3. **Commit** the work — code plus the status flip. For what to stage, message conventions, and whether to commit, follow the [Git Contract](docs/agents/git-contract.md).
 
 ## Checklist Per Cycle
 

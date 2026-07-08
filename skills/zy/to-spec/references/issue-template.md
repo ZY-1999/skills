@@ -35,3 +35,13 @@ Behaviour, not line-by-line implementation. No file paths or implementation snip
 ## Rework on failure
 
 One line: the revert/retry point, or "failure is isolated; redo this spec only".
+
+<!--
+Evidence comment — appended by /tdd on close (not part of the design skeleton).
+Shape:
+  > **Comment** — implemented <date>; Status → ready-for-human
+  > - [x] <criterion> — `tests/...::test name`
+  > - Test run: `<command>` → N passed, 0 failed
+  > - Commit: `<sha>`
+Pointers only; no narration or source pasting.
+-->

@@ -30,7 +30,11 @@ Work from the conversation. If a PRD/bug reference was passed, fetch it and read
 
 The decomposition is the highest-leverage decision; a wrong cut propagates into every spec. If there's no PRD/bug parent, synthesise the agreed design first, then decompose that. **Acceptance lives here, not at design time** — each spec's key acceptance behaviors (critical paths) are what make it independently verifiable, so they're part of the cut, not deferred.
 
-> **Best-of-N.** Draft 2–3 independent candidates in parallel (spawn that many `general-purpose` sub-agents in one message, each given the same brief but told to diverge — different counts/axes, no convergence). Judge them in a **separate fresh-context sub-agent** — never let a drafter grade its own work — against the decomposition bar below. Refine the winner to address every defect, re-judge; repeat until PASS or **3 rounds** (then stop and surface remaining defects to the human). For a trivial case (single obvious answer, or one dictated by the parent), drop to one candidate and skip straight to the critique. Each candidate is a **list of specs** (title, one-line goal, parent, blocked-by, what it delivers, **key acceptance behaviors**) — not yet designed in depth.
+> **Best-of-N, file-grounded.** Candidates are drafted to disk, not prompt-fed into chat — the judge reviews grounded files, and losing candidates never enter your context. Drafts live under the feature folder's `.drafts/decompose/` (create the feature folder now if no parent is on disk yet; step 4 reuses it).
+>
+> Spawn 2–3 `general-purpose` sub-agents in one message, each told to diverge (different counts/axes, no convergence) and each writing its candidate to its **own folder** `.drafts/decompose/candidate-<N>/` — a list of specs (title, one-line goal, parent, blocked-by, what it delivers, **key acceptance behaviors**), not yet designed — returning only the path. Judge in a **separate fresh-context sub-agent** (never a drafter) by pointing it at `.drafts/decompose/`; it reads the folders and returns the winner plus defects against the bar below. Refine the winner **in its folder**, re-judge (re-reads); repeat until PASS or **3 rounds** (then surface remaining defects to the human with the drafts). Trivial case — single obvious answer, or one dictated by the parent: one candidate, straight to the critique.
+>
+> Drafts are transient: once the cut is confirmed (judge PASS), carry the winner into step 4; delete `.drafts/decompose/` once the skeletons land — the breakdown now lives as ground-truth issues.
 
 > **Reverse signals** — a spec isn't ready → split or redefine: goal still moving · not independently verifiable · scope bleed · no rework path · acceptance holes.
 
@@ -58,7 +62,7 @@ Pick the cut that best reduces risk and clarifies acceptance:
 
 ### 4. Land the skeletons — publish first, design after
 
-Once the decomposition is settled, **publish every spec's skeleton to the issue tracker** using [references/issue-template.md](./references/issue-template.md), in dependency order (blockers first, so `Blocked by` references real numbers) and set `Status: needs-design`, before designing any in depth — the breakdown becomes ground truth on disk, not stranded in chat. Fill the header (`Type`/`Parent`/`Blocked by`), `Goal`, `Acceptance criteria` (from step 3), `Scope`, `Context`; stub `Design` and `Rework on failure` with `> to be designed`.
+Once the decomposition is settled, **publish every spec's skeleton to the issue tracker** using [references/issue-template.md](./references/issue-template.md), in dependency order (blockers first, so `Blocked by` references real numbers) and set `Status: needs-design`, before designing any in depth — the breakdown becomes durable ground truth on disk, not a transient draft. Fill the header (`Type`/`Parent`/`Blocked by`), `Goal`, `Acceptance criteria` (from step 3), `Scope`, `Context`; stub `Design` and `Rework on failure` with `> to be designed`.
 
 ### 5. Design each spec (parallelize across specs; DESIGN-IT-TWICE for complex ones)
 

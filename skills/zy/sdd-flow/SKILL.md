@@ -49,7 +49,9 @@ Continue until every approved spec is built.
 
 ### 3. Review — `/review` + fix
 
-Run the two-axis SDD review (Standards + Spec) against the merge-base of the branch — the point just before Stage 2 started. Use `/review` if that skill is loaded; otherwise fall back to `/code-review`, or flag for manual review if neither is available. Fix every hard finding, then re-run until clean or the only remaining findings are explicit judgement calls the human accepts.
+The agent that just built the code (Stage 2) can't grade its own work. Run `/review` against the merge-base just before Stage 2 started (the Gate A spec commit), handing it the specs from the tracker — it runs the two-axis (Standards + Spec) review in fresh-context sub-agents. Never inline self-review (e.g. `/code-review` in the main context); if `/review` isn't available, spawn one fresh-context `general-purpose` sub-agent yourself with the same two-axis brief.
+
+Fix every hard finding, then re-run until clean, or the only remaining findings are explicit judgement calls the human accepts.
 
 ### 4. Summarize & maintain docs
 

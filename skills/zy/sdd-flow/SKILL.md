@@ -59,7 +59,6 @@ Before declaring done:
 
 - [ ] Sweep `CONTEXT.md` for terms introduced during the build; add any still missing.
 - [ ] Offer ADRs for any hard-to-reverse, surprising, real-trade-off decisions made along the way (the `/grill-with-docs` bar — sparingly).
-- [ ] If code terrain shifted materially, run `/codemap` **drift-check** against the relevant `docs/codemap/` map — if it reports drift, update the affected map (skip if `/codemap` isn't loaded).
 - [ ] Write a one-paragraph summary of what shipped, with pointers to the PRD / specs / PR — not a re-narration.
 
 ## When NOT to use this skill

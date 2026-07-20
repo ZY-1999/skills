@@ -32,24 +32,24 @@ Decompose the approved PRD into planning-complete specs (each one = one `/tdd` s
 
 ### Gate A — human reviews the spec breakdown
 
-The specs are already on disk (Stage 1 published them in dependency order to the issue tracker). Point the user at those files and have them review them directly — don't re-paste the breakdown in chat. Ask: **"Specs look right → start building? Or redo the breakdown?"**
+The specs are already on disk (Stage 1 published them in dependency order to the issue tracker). Point the user at those files and have them review them directly — don't re-paste the breakdown in chat. This is also where **test-seam choices** get human judgment (which seam each spec crosses, whether new seams are justified) — `/to-prd` sketches them without pausing for confirmation. Ask: **"Specs look right → start building? Or redo the breakdown?"**
 
 - **Redo** → back to Stage 1 with the user's feedback.
-- **Approve** → flip every spec `ready-for-human` → `ready-for-agent`.Commit the current work product now — the landed spec skeletons and their designs. For what to stage, message conventions, and whether to commit, follow the [Git Contract](docs/agents/git-contract.md), then Stage 2.
+- **Approve** → flip every spec `ready-for-human` → `ready-for-agent`. Commit the current work product now — the landed spec skeletons and their designs. For what to stage, message conventions, and whether to commit, follow the [Git Contract](docs/agents/git-contract.md), then Stage 2.
 
 ### 2. Build — `/tdd` per spec, in dependency order
 
 For each approved spec whose blockers are done:
 
 1. Pick the next unblocked spec (read the tracker's status/labels if unclear).
-2. Run `/tdd` — red-green-refactor, one vertical slice per tracer bullet. The spec already carries the interface and prioritized behaviors, so `/tdd` starts straight at red-green (no separate planning step).
-3. Next spec.
+2. Invoke `/tdd` on the spec and run it to completion — tracer bullet → incremental loop → refactor → codemap drift-check (if `/codemap` is loaded) → close the spec (status flip + evidence comment + commit, per the Git Contract).
+3. If `/tdd` hits the spec's **Rework on failure** point, surface that to the user before continuing — don't silently paper over a spec whose design the build proved wrong.
 
 Continue until every approved spec is built.
 
 ### 3. Review — `/review` + fix
 
-The agent that just built the code (Stage 2) can't grade its own work. Run `/review` against the merge-base just before Stage 2 started (the Gate A spec commit), handing it the specs from the tracker — it runs the two-axis (Standards + Spec) review in fresh-context sub-agents. Never inline self-review (e.g. `/code-review` in the main context); if `/review` isn't available, spawn one fresh-context `general-purpose` sub-agent yourself with the same two-axis brief.
+Run `/review` against the merge-base just before Stage 2 started (the Gate A spec commit), handing it the specs from the tracker — it runs the two-axis (Standards + Spec) review in fresh-context sub-agents, so the review isn't biased by the code you just wrote in Stage 2. Never inline self-review (e.g. `/code-review` in the main context); if `/review` isn't available, spawn one fresh-context `general-purpose` sub-agent yourself with the same two-axis brief.
 
 Fix every hard finding, then re-run until clean, or the only remaining findings are explicit judgement calls the human accepts.
 

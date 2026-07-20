@@ -10,6 +10,13 @@ Write a handoff document summarising the current conversation so a fresh agent c
 
 Save to the **OS temporary directory**, not the workspace — a handoff is a transient bridge between sessions, not a committed artifact.
 
+**Filename must include a timestamp** so concurrent or repeated handoffs never collide or overwrite each other:
+
+- `handoff-YYYYMMDD-HHMMSS.md` (minimal), or
+- `handoff-YYYYMMDD-HHMMSS-<short-slug>.md` when the argument suggests a clear topic slug (kebab-case, ≤4 words), e.g. `handoff-20260709-143052-login-redirect.md`.
+
+Derive the timestamp from the current date/time at write time, not from the conversation. Use 24-hour local time. Never reuse a bare `handoff.md` or any name that omits the timestamp.
+
 Include:
 
 - **Status** — where the work stands now (done / in-progress / blocked), one paragraph.

@@ -17,8 +17,6 @@ Explore the repo to understand the current state of the codebase, if you haven't
 
 Sketch the seams at which you're going to test the change. Existing seams should be preferred to new ones. Use the highest seam possible. If new seams are needed, propose them at the highest point you can. The fewer seams across the codebase, the better - the ideal number is one.
 
-Check with the user that these seams match their expectations.
-
 ### 3. Draft the PRD
 
 Pick the template that matches what you're publishing and fill it from the conversation (no interviewing — synthesize what you already discussed). This is the **draft** — don't publish yet; step 5 publishes once the adversarial review (step 4) passes.
@@ -48,7 +46,7 @@ The review runs in two phases, **veracity first** — because feasibility judged
    - **ADR alignment** — no contradiction with a key-decision ADR; where the PRD must depart from one, it's flagged, not buried.
    - **(Architecture template)** the deepening direction is coherent against the current module structure.
 
-If the sub-agent returns defects, loop back — re-explore the code and fix the draft (correct a claim, soften an over-confident assertion into a flagged assumption). Seam-related defects go back to step 2 (re-confirm any seam change with the user); claim/direction defects stay in step 3. Re-run the sub-agent. If defects persist past **3 rounds**, stop and surface them to the user with the draft, un-published.
+If the sub-agent returns defects, loop back — re-explore the code and fix the draft (correct a claim, soften an over-confident assertion into a flagged assumption). Seam-related defects go back to step 2; claim/direction defects stay in step 3. Re-run the sub-agent. If defects persist past **3 rounds**, stop and surface them to the user with the draft, un-published.
 
 ### 5. Publish
 

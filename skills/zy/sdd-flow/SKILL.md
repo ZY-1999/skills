@@ -39,11 +39,17 @@ The specs are already on disk (Stage 1 published them in dependency order to the
 
 ### 2. Build — `/tdd` per spec, in dependency order
 
+Orchestrate from the main context; **run each `/tdd` in a fresh-context sub-agent** (`general-purpose`) so the build does not accumulate into this session. One sub-agent per spec; wait for it to finish before starting the next unblocked one.
+
 For each approved spec whose blockers are done:
 
 1. Pick the next unblocked spec (read the tracker's status/labels if unclear).
-2. Invoke `/tdd` on the spec and run it to completion — tracer bullet → incremental loop → refactor → codemap drift-check (if `/codemap` is loaded) → close the spec (status flip + evidence comment + commit, per the Git Contract).
-3. If `/tdd` hits the spec's **Rework on failure** point, surface that to the user before continuing — don't silently paper over a spec whose design the build proved wrong.
+2. Spawn a sub-agent whose brief is: follow `/tdd` on this spec to completion (tracer bullet → incremental loop → refactor → codemap drift-check if `/codemap` is loaded → close: status flip + evidence comment + commit, per the Git Contract). Hand it only what it needs to start cold:
+   - the **spec path** (and parent PRD path if the tracker needs it)
+   - pointers from the spec's **Context** (modules, ADR numbers, glossary terms) — paths/IDs, not pasted bodies
+   - `docs/agents/git-contract.md` (and `docs/agents/issue-tracker.md` if status flips go through the tracker)
+   - never this orchestration chat, prior specs' diffs, or unrelated PRD grilling
+3. Take the sub-agent's result (PASS / closed, or **Rework on failure**). If rework, surface it to the user before continuing — don't silently paper over a spec whose design the build proved wrong.
 
 Continue until every approved spec is built.
 

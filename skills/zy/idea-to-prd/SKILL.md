@@ -1,6 +1,6 @@
 ---
 name: idea-to-prd
-description: SDD's front half, and the one-command end-to-end entry: grill a raw idea/requirement → synthesise the PRD → human Gate 0 → hand off to /sdd-flow. Also completes an existing incomplete PRD draft by grilling only its gaps. Owns grilling + PRD + Gate 0 only; no git.
+description: "SDD's front half, and the one-command end-to-end entry: grill a raw idea/requirement → synthesise the PRD → human Gate 0 → hand off to /sdd-flow. Also completes an existing incomplete PRD draft by grilling only its gaps. Owns grilling + PRD + Gate 0 only; no git."
 ---
 
 # Idea → PRD

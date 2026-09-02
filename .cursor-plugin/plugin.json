@@ -1,0 +1,27 @@
+{
+  "name": "zy-skills",
+  "version": "1.0.1",
+  "description": "Spec-Driven Development skills (grilling, PRD/spec, TDD, code maps, end-to-end SDD flow).",
+  "skills": [
+    "./skills/engineering/grill-with-docs",
+    "./skills/engineering/prototype",
+    "./skills/engineering/domain-modeling",
+    "./skills/engineering/codebase-design",
+    "./skills/zy/route",
+    "./skills/zy/setup-skills",
+    "./skills/zy/improve-architecture",
+    "./skills/zy/diagnose-bug",
+    "./skills/zy/to-prd",
+    "./skills/zy/to-spec",
+    "./skills/zy/codemap",
+    "./skills/zy/tdd",
+    "./skills/zy/review",
+    "./skills/zy/idea-to-prd",
+    "./skills/zy/sdd-flow",
+    "./skills/zy/handoff",
+    "./skills/productivity/grill-me",
+    "./skills/productivity/grilling",
+    "./skills/productivity/teach",
+    "./skills/productivity/writing-great-skills"
+  ]
+}

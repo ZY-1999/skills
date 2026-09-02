@@ -1,6 +1,6 @@
 ---
 name: sdd-flow
-description: Drive a feature from an approved PRD to shipped — the back half of the Spec-Driven Development pipeline: spec → build → review → doc maintenance. Decomposes the PRD into specs via /to-spec, builds each via /tdd, reviews, and maintains docs.
+description: "Drive a feature from an approved PRD to shipped — the back half of the Spec-Driven Development pipeline: spec → build → review → doc maintenance. Decomposes the PRD into specs via /to-spec, builds each via /tdd, reviews, and maintains docs."
 ---
 
 # SDD Flow (PRD → ship)

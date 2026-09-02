@@ -1,0 +1,84 @@
+{
+  "version": 1,
+  "marketplaceName": "zy-skills-local",
+  "manifestMtime": 1786933326321.3628,
+  "createdAt": 1788312464192,
+  "plugins": [
+    {
+      "name": "zy-skills",
+      "description": "Spec-Driven Development skills (grilling, PRD/spec, TDD, code maps, end-to-end SDD flow). Fork of mattpocock/skills with a zy/ SDD bucket.",
+      "version": "1.0.1",
+      "source": "./",
+      "homepage": "https://github.com/ZY-1999/skills",
+      "license": "MIT",
+      "marketplaceName": "zy-skills-local",
+      "installedPath": "C:\\Users\\102346\\.codebuddy\\plugins\\marketplaces\\zy-skills-local\\",
+      "_capabilitiesLoaded": true,
+      "skills": [
+        {
+          "name": "route",
+          "description": "Route any question to the skill or flow that fits it. A router over this fork's resolved skills.",
+          "path": "skills\\zy\\route"
+        },
+        {
+          "name": "setup-skills",
+          "description": "Configure a repo for the SDD skills — set up its local-markdown issue tracker, triage label vocabulary, domain doc layout, and an initial project-level CodeMap. Run once before first use of the other skills.",
+          "path": "skills\\zy\\setup-skills"
+        },
+        {
+          "name": "to-prd",
+          "description": "Turn the current conversation into a parent issue — a feature PRD, a bug, or an architecture-deepening PRD — and publish it to the project issue tracker. No interview, just synthesis of what you already discussed. Picks the template by input nature; one fresh-context sub-agent adversarially reviews the draft — veracity first (are the facts real?), then feasibility — before it ships; produces the parent that `/to-spec` decomposes into specs.",
+          "path": "skills\\zy\\to-prd"
+        },
+        {
+          "name": "idea-to-prd",
+          "description": "SDD's front half, and the one-command end-to-end entry: grill a raw idea/requirement → synthesise the PRD → human Gate 0 → hand off to /sdd-flow. Also completes an existing incomplete PRD draft by grilling only its gaps. Owns grilling + PRD + Gate 0 only; no git.",
+          "path": "skills\\zy\\idea-to-prd"
+        },
+        {
+          "name": "to-spec",
+          "description": "Decompose a PRD, a bug, or the current (already-grilled) conversation into specs — atomic, planning-complete units an agent implements. One spec = one /tdd session. The breakdown is adversarially best-of-N'd with a fresh-context judge; complex-spec design uses /codebase-design (DESIGN-IT-TWICE for genuine complexity); spec skeletons land on disk before per-spec design.",
+          "path": "skills\\zy\\to-spec"
+        },
+        {
+          "name": "tdd",
+          "description": "Implement a planning-complete spec test-first (red-green-refactor). Use after /to-spec has produced a spec — the spec already carries the interface and the prioritized behaviors to test, so this skill starts straight at the tracer bullet.",
+          "path": "skills\\zy\\tdd"
+        },
+        {
+          "name": "codemap",
+          "description": "Generate, update, or drift-check agent-facing CodeMaps — progressive code-terrain indexes that route an agent to the right source-linked evidence without loading the whole repo. Use it to map a feature from entry to effect, orient on an unfamiliar codebase, or check whether existing maps are stale after a diff. Feeds `/to-spec` (reduce chaos before splitting) and any skill that needs to \"look at the terrain first\".",
+          "path": "skills\\zy\\codemap"
+        },
+        {
+          "name": "review",
+          "description": "Review the changes since a fixed point (commit, branch, tag, or merge-base) along two axes — Standards (does the code follow this repo's documented coding standards?) and Spec (does the code match what the originating issue/PRD asked for?). Runs both reviews in parallel fresh-context sub-agents and reports them side by side. Use when the user wants to review a branch, a PR, work-in-progress changes, asks to \"review since X\", or when `/sdd-flow` reaches its review stage.",
+          "path": "skills\\zy\\review"
+        },
+        {
+          "name": "sdd-flow",
+          "description": "Drive a feature from an approved PRD to shipped — the back half of the Spec-Driven Development pipeline: spec → build → review → doc maintenance. Decomposes the PRD into specs via /to-spec, builds each via /tdd, reviews, and maintains docs.",
+          "path": "skills\\zy\\sdd-flow"
+        },
+        {
+          "name": "handoff",
+          "description": "Compact the current conversation into a handoff file in the OS temp dir, then emit a ready-to-paste starter prompt (\"read <path>, then continue <action>\") for the next session. Run when a session that will continue elsewhere is wrapping up.",
+          "path": "skills\\zy\\handoff"
+        },
+        {
+          "name": "diagnose-bug",
+          "description": "Disciplined diagnosis loop for hard bugs and performance regressions — build a feedback loop, reproduce + minimise, hypothesise, instrument to pin the root cause — then hand the diagnosis to /to-prd.",
+          "path": "skills\\zy\\diagnose-bug"
+        },
+        {
+          "name": "improve-architecture",
+          "description": "Scan a codebase for architectural deepening opportunities, publish a visual HTML report, then publish every candidate (Top recommendation included) as a lightweight needs-info PRD draft and stop. Discovery only — proposes no interfaces, runs no /to-prd synthesis; ships PRD drafts, not specs.",
+          "path": "skills\\zy\\improve-architecture"
+        }
+      ],
+      "sourcePath": "./",
+      "configPath": "C:\\Users\\102346\\.codebuddy\\plugins\\marketplaces\\zy-skills-local\\.codebuddy-plugin\\plugin.json",
+      "status": "enabled"
+    }
+  ]
+}

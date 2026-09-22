@@ -1,13 +1,13 @@
 ---
 name: diagnose-bug
-description: Disciplined diagnosis loop for hard bugs and performance regressions — build a feedback loop, reproduce + minimise, hypothesise, instrument to pin the root cause — then hand the diagnosis to /to-prd.
+description: Disciplined diagnosis loop for hard bugs and performance regressions — build a feedback loop, reproduce + minimise, hypothesise, instrument to pin the root cause. The confirmed diagnosis is the deliverable; it does not fix, and hands off to nothing.
 ---
 
 # Diagnose Bug
 
 A discipline for hard bugs and performance regressions. Skip phases only when explicitly justified.
 
-Diagnose to a **confirmed root cause**, then hand the diagnosis to `/to-prd` — you do **not** fix here.
+Diagnose to a **confirmed root cause** — you do **not** fix here. The diagnosis itself is the deliverable; there is no automatic hand-off into the SDD pipeline.
 
 When exploring the codebase, read `CONTEXT.md` (if it exists) to get a clear mental model of the relevant modules, and check ADRs in the area you're touching.
 
@@ -103,20 +103,20 @@ Tool preference:
 2. **Targeted logs** at the boundaries that distinguish hypotheses.
 3. Never "log everything and grep".
 
-**Tag every debug log** with a unique prefix, e.g. `[DEBUG-a4f2]`. Cleanup at hand-off becomes a single grep. Untagged logs survive; tagged logs die.
+**Tag every debug log** with a unique prefix, e.g. `[DEBUG-a4f2]`. Cleanup at delivery becomes a single grep. Untagged logs survive; tagged logs die.
 
-**Perf branch.** For performance regressions, logs are usually wrong. Instead: establish a baseline measurement (timing harness, `performance.now()`, profiler, query plan), then bisect. Measure first, hand off the finding second.
+**Perf branch.** For performance regressions, logs are usually wrong. Instead: establish a baseline measurement (timing harness, `performance.now()`, profiler, query plan), then bisect. Measure first, deliver the finding second.
 
 End of Phase 4: **one hypothesis confirmed**, the rest falsified.
 
-## Phase 5 — Hand off to `/to-prd`
+## Phase 5 — Deliver the diagnosis
 
-The diagnosis is the deliverable — you do **not** fix here. Hand it to `/to-prd`.
+The confirmed root cause is the deliverable — you do **not** fix here. Present it: the root cause, the evidence that pins it, the minimal repro command, and a suggested fix direction.
 
-Once `/to-prd` publishes the `bug`, continue the SDD pipeline from it — invoke `/sdd-flow` to ship the fix end-to-end (spec → build → review → maintain).
+The next move is the user's, not this skill's — turning the diagnosis into a tracked fix and shipping it is a separate, user-routed decision (`/route`).
 
-Before handing off, clean up the diagnosis's temporary artifacts: remove all `[DEBUG-...]` instrumentation (`grep` the prefix) and delete throwaway harnesses/scripts — unless the Phase 1 feedback loop is itself a clean failing test `/to-spec` can adopt as the regression seam, in which case leave it and record it.
+Before finishing, clean up the diagnosis's temporary artifacts: remove all `[DEBUG-...]` instrumentation (`grep` the prefix) and delete throwaway harnesses/scripts — unless the Phase 1 feedback loop is itself a clean failing test worth adopting as the regression seam, in which case leave it and record it.
 
-### Architectural hand-off (optional)
+### Architectural follow-up (optional)
 
-If the root cause traces to architecture (no correct test seam, tangled callers, hidden coupling, a missing module boundary), recommend `/improve-architecture` with the specifics — **after** the hand-off, not before. You have more information now than when you started.
+If the root cause traces to architecture (no correct test seam, tangled callers, hidden coupling, a missing module boundary), recommend `/improve-architecture` with the specifics — **after** delivering the diagnosis, not before. You have more information now than when you started.

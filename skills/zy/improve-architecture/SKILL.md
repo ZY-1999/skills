@@ -1,12 +1,11 @@
 ---
 name: improve-architecture
-description: Scan a codebase for architectural deepening opportunities, publish a visual HTML report, then publish every candidate (Top recommendation included) as a lightweight needs-info PRD draft and stop. Discovery only — proposes no interfaces, runs no /to-prd synthesis; ships PRD drafts, not specs.
-disable-model-invocation: true
+description: Scan a codebase for architectural deepening opportunities, publish a visual HTML report, then publish every candidate (Top recommendation included) as a lightweight needs-info PRD draft and stop. Discovery only — proposes no interfaces and runs no PRD synthesis; ships drafts, not specs.
 ---
 
 # Improve Architecture
 
-Surface architectural friction and propose **deepening opportunities** — refactors that turn shallow modules into deep ones — as a visual HTML report, then publish PRD drafts and stop. **Discovery only — no interfaces proposed, no `/to-prd` synthesis.** It discovers candidates, publishes the report as the first artifact in a new SDD feature folder, and lifts every `Strong` / `Worth exploring` candidate (Top recommendation included) straight from its report card into a thin `needs-info` `prd` draft — Implementation / Testing Decisions left empty for `/idea-to-prd` mode 2 to grill later.
+Surface architectural friction and propose **deepening opportunities** — refactors that turn shallow modules into deep ones — as a visual HTML report, then publish PRD drafts and stop. **Discovery only — no interfaces proposed, no PRD synthesis.** It discovers candidates, publishes the report as the first artifact in a new feature folder, and lifts every `Strong` / `Worth exploring` candidate (Top recommendation included) straight from its report card into a thin `needs-info` `prd` draft — Implementation / Testing Decisions left empty, to be grilled in later.
 
 > Precondition: the issue tracker is configured — run `/setup-skills` first if `.scratch/` isn't set up.
 
@@ -54,7 +53,7 @@ Fix anything broken, re-check, then open the file for the user — `xdg-open <pa
 
 Every scan surfaces more than one candidate, and **every `Strong` / `Worth exploring` candidate lands in the issue tracker as a `needs-info` PRD draft — the Top recommendation included.** The report is a visual overview, not a backlog; nothing of substance should die inside `architecture-review.html`.
 
-improve-architecture is **discovery only** — it does **not** run `/to-prd`. Synthesising a full PRD (filling Implementation / Testing Decisions, sketching test seams) is `/idea-to-prd` mode 2's job, once the user picks a draft to pursue. Instead, lift each candidate straight from its report card into a thin `prd` draft — Problem Statement / Deepening Goals / Solution-direction carried over, Implementation / Testing Decisions left empty.
+improve-architecture is **discovery only** — it does **not** synthesise PRDs. Filling Implementation / Testing Decisions and sketching test seams happens later, once the user picks a draft to pursue — never here. Instead, lift each candidate straight from its report card into a thin `prd` draft — Problem Statement / Deepening Goals / Solution-direction carried over, Implementation / Testing Decisions left empty.
 
 Route each candidate to a draft by **independence**, not by rank:
 
@@ -65,21 +64,21 @@ Route each candidate to a draft by **independence**, not by rank:
 Every draft, regardless of folder, is built the same way:
 
 - `Type: prd` / `Status: needs-info` parent, using the architecture PRD shape (`Deepening Goals` in place of `User Stories`).
-- Fill Problem Statement / Deepening Goals / Solution-direction from the card's Problem / Benefits / Solution; **leave Implementation Decisions and Testing Decisions empty** — they get filled when `/idea-to-prd` mode 2 grills the draft into an approved PRD.
+- Fill Problem Statement / Deepening Goals / Solution-direction from the card's Problem / Benefits / Solution; **leave Implementation Decisions and Testing Decisions empty** — they get filled when the draft is later grilled into a complete PRD.
 - Don't redraw the diagram — point _Further Notes_ at the card's anchor in `architecture-review.html` so the draft traces back to its source.
 
 ### 4. Confirm the drafts are `needs-info`, then tell the user
 
-Step 3 already wrote every draft as `needs-info` — there's no `/to-prd` run, so nothing to override. improve-architecture runs no gate; `needs-info` ("waiting on your review + the gaps `/idea-to-prd` will grill") is the honest state for unvetted discovery output.
+Step 3 already wrote every draft as `needs-info` — there's no synthesis run, so nothing to override. improve-architecture runs no gate; `needs-info` ("waiting on review + gap-filling") is the honest state for unvetted discovery output.
 
 Then tell the user, in chat:
 
 - the scan's feature folder path (where `architecture-review.html` + the Top draft live),
 - each independent candidate draft's feature folder path,
-- the next move is theirs: run `/idea-to-prd` on any draft — it grills the gaps, flips `needs-info` → `ready-for-human`.
+- the next move is theirs — completing a draft into an approved PRD (and whether it then continues into SDD) is a separate, user-routed decision (`/route`).
 
 ## When NOT to use this skill
 
-- You have a concrete feature idea (not an architecture scan) → `/idea-to-prd` (grill → PRD → Gate 0, then it hands off to `/sdd-flow`).
+- You have a concrete feature idea (not an architecture scan) → `/idea-to-prd` (grill → PRD → Gate 0).
 - You already know what to change → skip the scan; run `/to-prd` directly.
 - You need a code-navigation index, not deepening candidates → `/codemap`.

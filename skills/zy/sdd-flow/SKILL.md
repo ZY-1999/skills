@@ -69,7 +69,7 @@ Before declaring done:
 
 ## When NOT to use this skill
 
-- You have a raw idea, not a PRD yet → `/idea-to-prd` first (it runs grill → PRD → Gate 0, then hands off here).
+- You have a raw idea, not a PRD yet → `/idea-to-prd` first (grill → PRD → Gate 0; routing here afterwards is a separate user decision — see `/route`).
 - One-off fix or trivial change → just `/tdd` or `/diagnose-bug` directly.
 - You already have specs → start at Stage 2 (build).
 - The repo hasn't run `/setup-skills` → run that first.

@@ -13,17 +13,18 @@ Scan the **intent** below; run the skill on the right. One question → one skil
 ## Build something
 
 - **Start from an architecture scan** → `/improve-architecture`
-- **Ship end-to-end, hands-off** → `/idea-to-prd`
+- **Idea → approved PRD (grill + Gate 0)** → `/idea-to-prd`
 - **I have an incomplete PRD draft(status = 'needs-info')** → `/idea-to-prd`
 - **Drive it myself, I have a codebase** → `/grill-with-docs` → `/to-prd` → `/sdd-flow`
 - **Drive it myself, no codebase** → `/grill-me` → `/to-prd` → `/sdd-flow`
-- **I already have an approved PRD, ship it** → `/sdd-flow`
+- **Approved PRD → continue into SDD (spec → build → review)** → `/sdd-flow`
 - **Just decompose a PRD into specs** → `/to-spec`
 - **I already have a spec** → `/tdd`
 
 ## A bug
 
 - **Find the root cause of one bug** → `/diagnose-bug`
+- **Diagnosis in hand — turn it into a tracked fix and ship it** → `/to-prd` → `/sdd-flow`
 - **The fix is clear, just implement it** → `/tdd`
 
 ## Design & modeling

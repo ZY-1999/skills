@@ -1,20 +1,20 @@
 ---
 name: idea-to-prd
-description: "SDD's front half, and the one-command end-to-end entry: grill a raw idea/requirement → synthesise the PRD → human Gate 0 → hand off to /sdd-flow. Also completes an existing incomplete PRD draft by grilling only its gaps. Owns grilling + PRD + Gate 0 only; no git."
+description: "SDD's front half: grill a raw idea/requirement → synthesise the PRD → human Gate 0 → stop at the approved PRD on disk. Also completes an existing incomplete PRD draft by grilling only its gaps. Owns grilling + PRD + Gate 0 only; no git, no automatic hand-off into SDD."
 ---
 
 # Idea → PRD
 
-The front half of the Spec-Driven Development pipeline: turn a raw idea or requirement into an **approved PRD on disk**, then hand off to `/sdd-flow` for everything after. Owns only grilling, PRD synthesis, and the human Gate 0 — **no git operations**.
+The front half of the Spec-Driven Development pipeline: turn a raw idea or requirement into an **approved PRD on disk** — and stop there. Owns only grilling, PRD synthesis, and the human Gate 0 — **no git operations**, and no hand-off: whether the approved PRD continues into SDD is the user's next, separately-routed decision (`/route`).
 
 Requires `/setup-skills` to have run in this repo (issue tracker, triage labels, domain docs). If `docs/agents/issue-tracker.md` is missing, stop and run `/setup-skills` first.
 
 ```
-idea → grill → prd → [Gate 0] → /sdd-flow (spec → build → review → maintain)
+idea → grill → prd → [Gate 0] → done (approved PRD on disk)
                  ↑ redo
 ```
 
-**Invocation contract.** Every stage uses model-invoked skills, so this skill chains automatically: grilling = `/grilling` + `/domain-modeling`, then `/to-prd`. On Gate 0 approval it invokes `/sdd-flow` (also model-invoked) to run the rest — so `/idea-to-prd` is the one-command end-to-end entry: idea all the way to shipped.
+**Invocation contract.** Every stage uses model-invoked skills, so this skill chains automatically: grilling = `/grilling` + `/domain-modeling`, then `/to-prd`. On Gate 0 approval it stops — the approved PRD is the deliverable. Continuing into SDD (`/sdd-flow`) is never an automatic hand-off; it is a user-routed next move (`/route`).
 
 ## Human gate — review the file, not the chat
 
@@ -56,16 +56,16 @@ Synthesize the PRD from the grilled context (no interview — `/to-prd` forbids 
 
 ### Gate 0 — human reviews the PRD
 
-The PRD is already on disk (Stage 2 published it). Point the user at that file and have them review it directly — don't re-paste it in chat. Ask exactly: **"PRD looks good → break into specs? Or redo the PRD?"**
+The PRD is already on disk (Stage 2 published it). Point the user at that file and have them review it directly — don't re-paste it in chat. Ask exactly: **"PRD looks good → approve? Or redo the PRD?"**
 
 - **Redo** → back to Stage 2, feeding the user's feedback into the next draft.
-- **Approve** → invoke `/sdd-flow` to continue.
+- **Approve** → done. The approved PRD on disk is this skill's deliverable — tell the user where it is, and that the next move is theirs (route: `/sdd-flow` to continue into SDD).
 
-Do not hand off until the human approves.
+Do not treat the PRD as approved before the human approves.
 
 ## When NOT to use this skill
 
 - You already have an approved PRD on disk → `/sdd-flow` directly (it owns everything after Gate 0).
-- The PRD comes from an architecture scan → start with `/improve-architecture` (it scans, publishes every candidate as a `needs-info` draft — Top included — and stops). To pursue one of those drafts, bring it back here — `/idea-to-prd` completes it (mode 2) → Gate 0 → `/sdd-flow`.
+- The PRD comes from an architecture scan → start with `/improve-architecture` (it scans, publishes every candidate as a `needs-info` draft — Top included — and stops). To pursue one of those drafts, bring it back here — `/idea-to-prd` completes it (mode 2) → Gate 0.
 - One-off fix or trivial change → just `/tdd` or `/diagnose-bug` directly.
 - The repo hasn't run `/setup-skills` → run that first.

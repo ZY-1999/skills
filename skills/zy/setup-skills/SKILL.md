@@ -23,7 +23,7 @@ The repo may already have its own spec / PRD / issue-tracking system — bespoke
 - It does **not** change the structure this skill sets up. The layouts of the issue tracker (`.scratch/`), triage labels, domain docs (`CONTEXT.md` + `docs/adr/`), and CodeMap (`docs/codemap/`) are defined by this skill's defaults. Don't relocate them to match the existing system, don't fork a second layout alongside it, and don't reshape this skill's files to fit it.
 - If the existing system holds something worth keeping (a glossary, decision log, settled scope), fold that **content** into this skill's files — write it into `CONTEXT.md`, `docs/adr/`, `docs/agents/domain.md`. Adapt the content to this structure, never the structure to the content.
 
-This is distinct from step 2's "raise as a question if the repo contradicts the default": that rule covers *this skill's own outputs* already pointing somewhere else. An unrelated pre-existing system is not a contradiction — it's source material. Only an explicit user request to point one of this skill's outputs at the existing system counts as a step-2 exception.
+This is distinct from step 2's "raise as a question if the repo contradicts the default": that rule covers _this skill's own outputs_ already pointing somewhere else. An unrelated pre-existing system is not a contradiction — it's source material. Only an explicit user request to point one of this skill's outputs at the existing system counts as a step-2 exception.
 
 ## Process
 
@@ -31,7 +31,7 @@ This is distinct from step 2's "raise as a question if the repo contradicts the 
 
 Look at the current repo to understand its starting state. Read whatever exists; don't assume:
 
-- `AGENTS.md` and `CLAUDE.md` at the repo root — does either exist? Is there already an `## Agent skills` section in either?
+- `AGENTS.md` and `CLAUDE.md` at the repo root — does either exist? Is there already an `## Agent Notice` section in either?
 - `CONTEXT.md` and `CONTEXT-MAP.md` at the repo root
 - `docs/adr/` and any `src/*/docs/adr/` directories
 - `docs/agents/` — does this skill's prior output already exist?
@@ -45,11 +45,11 @@ Summarise what's present and what's missing, then present the **defaults for all
 
 The defaults:
 
-- **Issue tracker** — local markdown under `.scratch/` at the repo root. (Issues are the carrier for `spec`/`prd`/`bug`; `/to-prd`, `/to-spec`, and `/tdd` read/write here. See [issue-tracker-local.md](./references/issue-tracker-local.md).)
+- **Issue tracker** — local markdown under `.scratch/` at the repo root.
 - **Triage labels** — each canonical role's string equals its name (`needs-triage`, `needs-info`, `ready-for-agent`, `ready-for-human`, `wontfix`). See [triage-labels.md](./references/triage-labels.md).
-- **Domain docs** — single-context: one `CONTEXT.md` + `docs/adr/` at the repo root. Read by `/grill-with-docs`, `/tdd`, etc.
-- **CodeMap** — build the project-level map across the whole repo via `/codemap`. Feeds `/to-spec`'s terrain step.
-- **Git contract** — deploy [git-contract.md](./references/git-contract.md) to `docs/agents/git-contract.md`. Branch strategy defaults to **solo** (develop on the current branch); pick **feature-branch** (`feature/<slug>`/`bugfix/<slug>`) when the work needs isolation. The contract also carries commit-message conventions; `/sdd-flow` and `/tdd` follow it for commits and branch decisions.
+- **Domain docs** — single-context: one `CONTEXT.md` + `docs/adr/` at the repo root.
+- **CodeMap** — build the project-level map across the whole repo via `/codemap`.
+- **Git contract** — deploy [git-contract.md](./references/git-contract.md) to `docs/agents/git-contract.md`. Branch strategy defaults to **solo** (develop on the current branch); pick **feature-branch** (`feature/<slug>`/`bugfix/<slug>`) when the work needs isolation. The contract also carries commit-message conventions;
 
 Raise a section as a question **only if** the repo's actual state contradicts the default — e.g. a monorepo needs multi-context (`CONTEXT-MAP.md` + per-context `CONTEXT.md` files), issues already live somewhere other than `.scratch/`, or the repo is too large/trivial for a CodeMap (or `/codemap` isn't installed). Otherwise proceed with the defaults.
 
@@ -57,7 +57,7 @@ Raise a section as a question **only if** the repo's actual state contradicts th
 
 Show the user a draft of:
 
-- The `## Agent skills` block to add to whichever of `CLAUDE.md` / `AGENTS.md` is being edited (see step 4 for selection rules)
+- The `## Agent Notice` block to add to whichever of `CLAUDE.md` / `AGENTS.md` is being edited (see step 4 for selection rules)
 - The contents of `docs/agents/issue-tracker.md`, `docs/agents/triage-labels.md`, `docs/agents/domain.md`, `docs/agents/git-contract.md`
 - **Two decisions for the git contract** — (1) branch strategy: solo or feature-branch; (2) this repo's commit-message conventions (conventional-commits prefix, sign-off, issue key, …), or "none". The `git-contract.md` draft reflects both — keep only the chosen branch-strategy mode and fill the conventions line.
 
@@ -73,12 +73,12 @@ Let them edit before writing.
 
 Never create `AGENTS.md` when `CLAUDE.md` already exists (or vice versa) — always edit the one that's already there.
 
-If an `## Agent skills` block already exists in the chosen file, update its contents in-place rather than appending a duplicate. Don't overwrite user edits to the surrounding sections.
+If an `## Agent Notice` block already exists in the chosen file, update its contents in-place rather than appending a duplicate. Don't overwrite user edits to the surrounding sections.
 
 The block:
 
 ```markdown
-## Agent skills
+## Agent Notice
 
 ### Issue tracker
 
@@ -98,7 +98,7 @@ The block:
 
 ### Git contract
 
-[one-line summary — active branch strategy (solo or feature-branch) + commit-message conventions; `/sdd-flow` and `/tdd` follow it for commits and branch decisions]. See `docs/agents/git-contract.md`.
+[one-line summary — active branch strategy (solo or feature-branch) + commit-message conventions; See `docs/agents/git-contract.md`.
 ```
 
 Then write the four docs files using the seed templates in this skill folder as a starting point:
@@ -112,4 +112,4 @@ Then build the project-level CodeMap: run `/codemap` in **project** mode to gene
 
 ### 5. Done
 
-Tell the user the setup is complete and which skills will now read from these files — the project CodeMap feeds `/to-spec`'s terrain step and any terrain-aware skill. Mention they can edit `docs/agents/*.md` directly later, and refresh or extend the CodeMap via `/codemap` — re-running this skill is only necessary to restart from scratch.
+Tell the user the setup is complete and which skills will now read from these files. Mention they can edit `docs/agents/*.md` directly later, and refresh or extend the CodeMap via `/codemap` — re-running this skill is only necessary to restart from scratch.

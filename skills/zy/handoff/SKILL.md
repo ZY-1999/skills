@@ -1,6 +1,6 @@
 ---
 name: handoff
-description: Compact the current conversation into a handoff file in the OS temp dir, then emit a ready-to-paste starter prompt ("read <path>, then continue <action>") for the next session. Run when a session that will continue elsewhere is wrapping up.
+description: "Compact the current conversation into a handoff file in the OS temp dir, then emit a ready-to-paste starter prompt (\"read <path>, then continue <action>\") for the next session. Run when a session that will continue elsewhere is wrapping up."
 argument-hint: "What will the next session be used for?"
 ---
 

@@ -1,6 +1,6 @@
 ---
 name: codemap
-description: Generate, update, or drift-check agent-facing CodeMaps — progressive code-terrain indexes that route an agent to the right source-linked evidence without loading the whole repo. Use it to map a feature from entry to effect, orient on an unfamiliar codebase, or check whether existing maps are stale after a diff. Feeds `/to-spec` (reduce chaos before splitting) and any skill that needs to "look at the terrain first".
+description: "Generate, update, or drift-check agent-facing CodeMaps — progressive code-terrain indexes that route an agent to the right source-linked evidence without loading the whole repo. Use it to map a feature from entry to effect, orient on an unfamiliar codebase, or check whether existing maps are stale after a diff. Feeds `/to-spec` (reduce chaos before splitting) and any skill that needs to \"look at the terrain first\"."
 ---
 
 # Codemap

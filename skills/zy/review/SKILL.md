@@ -1,6 +1,6 @@
 ---
 name: review
-description: Review the changes since a fixed point (commit, branch, tag, or merge-base) along two axes — Standards (does the code follow this repo's documented coding standards?) and Spec (does the code match what the originating issue/PRD asked for?). Runs both reviews in parallel fresh-context sub-agents and reports them side by side. Use when the user wants to review a branch, a PR, work-in-progress changes, asks to "review since X".
+description: "Review the changes since a fixed point (commit, branch, tag, or merge-base) along two axes — Standards (does the code follow this repo's documented coding standards?) and Spec (does the code match what the originating issue/PRD asked for?). Runs both reviews in parallel fresh-context sub-agents and reports them side by side. Use when the user wants to review a branch, a PR, work-in-progress changes, asks to \"review since X\""
 ---
 
 # Review — two axes, since a fixed point

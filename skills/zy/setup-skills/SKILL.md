@@ -80,6 +80,10 @@ The block:
 ```markdown
 ## Agent Notice
 
+### Grill first
+
+When the user's goal is to modify files or produce any output, interview them first with `/grill-me` — or `/grill-with-docs` when the decisions should be captured as ADRs/glossary — and keep asking until the full context is clear. Only then start the work.
+
 ### Issue tracker
 
 [one-line summary — local markdown under `.scratch/`]. See `docs/agents/issue-tracker.md`.

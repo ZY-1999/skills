@@ -1,6 +1,6 @@
 {
   "name": "zy-skills",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Spec-Driven Development skills (grilling, PRD/spec, TDD, code maps, end-to-end SDD flow).",
   "skills": [
     "./skills/engineering/grill-with-docs",

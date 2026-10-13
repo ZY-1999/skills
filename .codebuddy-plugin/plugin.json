@@ -1,7 +1,7 @@
 {
   "name": "zy-skills",
   "description": "Spec-Driven Development skills (grilling, PRD/spec, TDD, code maps, end-to-end SDD flow). Fork of mattpocock/skills with a zy/ SDD bucket.",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "license": "MIT",
   "skills": [
     "./skills/zy/route",

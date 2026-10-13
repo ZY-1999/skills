@@ -41,6 +41,13 @@ claude plugin install zy-skills@zy-skills
 
 或在 Claude Code 交互模式里：`/plugin marketplace add .` → `/plugin install zy-skills@zy-skills`。安装后仍需运行 `/setup-skills` 完成仓库配置。
 
+### Hook：提交前 review 门禁（v1.0.2 新增）
+
+插件自带一个 PreToolUse hook（[hooks/](./hooks/)）：在**跑过 `/setup-skills` 的仓库**里，agent 通过 Bash 执行 `git commit` 时会被拦截，要求先对未提交变更跑 `/review`；两个轴都无硬性违规时 `/review` 会把当前 diff 的哈希写入 `.git/zy-skills-review-approved`，随后重试同一提交即可放行（标记一次性消费，diff 一变即失效需重新 review）。
+
+- 只约束 ZCode / Claude Code 会话内 agent 发起的提交；你在自己终端手动 `git commit` 不受影响，是天然的逃生通道。
+- 未跑过 `/setup-skills` 的仓库（没有 `docs/agents/issue-tracker.md`）完全不生效，插件可安全全局安装。
+
 ## Skill 清单
 
 > **调用类型**：**用户调用** 只能由你键入触发，职责是编排；**模型调用** 可由你触发，也能在任务匹配时被 agent 自动选用，承载可复用的纪律。一个用户调用 skill 可以调用模型调用 skill，但不会调用另一个用户调用 skill。
@@ -72,7 +79,7 @@ claude plugin install zy-skills@zy-skills
 - **[to-prd](./skills/zy/to-prd/SKILL.md)** — 把当前对话综合成父项 issue 并发布到 issue 追踪器（不访谈，只综合）：feature → `prd`、bug → `bug`、架构深化 → `prd`（architecture 模板）。`（模型调用）`
 - **[to-spec](./skills/zy/to-spec/SKILL.md)** — 把 PRD / bug / 已 grilled 对话拆成 `spec`：原子、规划完备的单元，一个 spec = 一次 `/tdd` 会话。`（模型调用）`
 - **[tdd](./skills/zy/tdd/SKILL.md)** — 用 red-green-refactor 实现一个规划完备的 spec（纯实现，无 planning 步骤）。`（模型调用）`
-- **[review](./skills/zy/review/SKILL.md)** — 自某个固定点（commit/branch/tag/merge-base）对 diff 做双轴复核：Standards（是否遵循仓库编码规范）+ Spec（是否忠实实现原始 issue/PRD）；两轴并行 fresh-context 子代理跑，分轴并排报告、不跨轴合并。`（模型调用）`
+- **[review](./skills/zy/review/SKILL.md)** — 自某个固定点（commit/branch/tag/merge-base）对 diff 做双轴复核：Standards（是否遵循仓库编码规范）+ Spec（是否忠实实现原始 issue/PRD）；两轴并行 fresh-context 子代理跑，分轴并排报告、不跨轴合并。v1.0.2 起 agent 的 `git commit` 被插件门禁拦截后，也由它复核未提交变更并无硬性违规时放行。`（模型调用）`
 - **[codemap](./skills/zy/codemap/SKILL.md)** — 生成、更新或 drift-check agent 可读的 CodeMap（渐进式代码地形索引）。`（模型调用）`
 - **[idea-to-prd](./skills/zy/idea-to-prd/SKILL.md)** — SDD 流水线前半段：从想法/需求出发，grill 对齐设计 → 综合 PRD → 人审 Gate 0，止于已批准的 PRD；是否接力 `/sdd-flow` 走 SDD 开发由 `/route` 决定。只负责 grill + PRD + Gate 0，不碰 git。`（模型调用）`
 - **[sdd-flow](./skills/zy/sdd-flow/SKILL.md)** — SDD 流水线后半段：从已批准的 PRD 到交付（spec → build → review → maintain）。入口把 PRD 翻转为 `ready-for-agent`，然后 `/to-spec` 拆解、`/tdd` 逐个实现、`/review` 复核、维护文档；spec 质量归 `/to-spec`。承接已批准的 PRD（Gate 0 后）或手写 PRD。`（模型调用）`

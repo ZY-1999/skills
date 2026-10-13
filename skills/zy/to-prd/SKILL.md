@@ -1,6 +1,6 @@
 ---
 name: to-prd
-description: Turn the current conversation into a parent issue — a feature PRD, a bug, or an architecture-deepening PRD — and publish it to the project issue tracker. No interview, just synthesis of what you already discussed. Picks the template by input nature; one fresh-context sub-agent adversarially reviews the draft — veracity first (are the facts real?), then feasibility — before it ships; produces the parent that `/to-spec` decomposes into specs.
+description: Turn the current conversation into a parent issue — a feature PRD, a bug, or an architecture-deepening PRD — and publish it to the project issue tracker. No interview, just synthesis of what you already discussed. Picks the template by input nature; one fresh-context sub-agent adversarially reviews the draft — veracity first (are the facts real?), then feasibility — before it ships.
 ---
 
 This skill takes the current conversation context and codebase understanding and produces a **parent issue** — a feature PRD, a bug, or an architecture-deepening PRD. Do NOT interview the user — just synthesize what you already know.

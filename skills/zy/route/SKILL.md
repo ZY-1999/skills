@@ -17,6 +17,7 @@ Scan the **intent** below; run the skill on the right. One question → one skil
 - **I have an incomplete PRD draft(status = 'needs-info')** → `/idea-to-prd`
 - **Drive it myself, I have a codebase** → `/grill-with-docs` → `/to-prd` → `/sdd-flow`
 - **Drive it myself, no codebase** → `/grill-me` → `/to-prd` → `/sdd-flow`
+- **Requirement is simple and already complete (goal, scope, done-behaviors stated) — skip grilling and the PRD** → `/to-spec` → `/tdd`
 - **Approved PRD → continue into SDD (spec → build → review)** → `/sdd-flow`
 - **Just decompose a PRD into specs** → `/to-spec`
 - **I already have a spec** → `/tdd`

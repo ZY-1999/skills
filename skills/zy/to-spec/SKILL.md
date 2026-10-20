@@ -1,16 +1,28 @@
 ---
 name: to-spec
-description: Decompose a PRD, a bug, or the current (already-grilled) conversation into specs — atomic, planning-complete units an agent implements. One spec = one /tdd session. The breakdown is adversarially best-of-N'd with a fresh-context judge; complex-spec design uses /codebase-design (DESIGN-IT-TWICE for genuine complexity); spec skeletons land on disk before per-spec design.
+description: Decompose a PRD, a bug, the current (already-grilled) conversation, or a simple complete requirement into specs — atomic, planning-complete units an agent implements. Simple requirements pass a completeness gate at entry — anything under-specified is routed to /grill-me or /to-prd, never guessed into specs. One spec = one /tdd session. The breakdown is adversarially best-of-N'd with a fresh-context judge; complex-spec design uses /codebase-design (DESIGN-IT-TWICE for genuine complexity); spec skeletons land on disk before per-spec design.
 ---
 
 # To Spec
 
-A **spec** is the atomic unit of agent coding: the minimal thing an agent implements in one session, **planning-complete** — all planning settled here (simple specs let internals emerge in `/tdd`), so implementation starts straight at red-green. This skill turns a **PRD**, a **bug**, or a grilled conversation into specs; `prd`/`bug` are the parents, `spec` is the leaf.
+A **spec** is the atomic unit of agent coding: the minimal thing an agent implements in one session, **planning-complete** — all planning settled here (simple specs let internals emerge in `/tdd`), so implementation starts straight at red-green. This skill turns a **PRD**, a **bug**, a grilled conversation, or a simple complete requirement (admitted only through the completeness gate) into specs; `prd`/`bug` are the parents, `spec` is the leaf.
 
 ## Inputs
 
 - **A PRD or bug issue** (pass its number, URL, or path) → fetch and decompose. Every spec references it as `Parent`.
 - **A grilled conversation** (no PRD yet) → synthesise the agreed design, then decompose. Do **not** re-interview — the grilling already happened (typically via `/grill-with-docs`).
+- **A simple, complete requirement** (neither grilled nor distilled — it already answers everything a grill would ask) → vet it against the completeness bar below, then decompose directly, no `Parent`. Fails the bar → hand it back as the bar says — never guess.
+
+<completeness-bar>
+
+Admit a requirement through the no-PRD door only if **both** hold:
+
+- **Simple** — one feature surface; the outcome fits in a sentence or two; nothing here would earn a long grill or DESIGN-IT-TWICE.
+- **Complete** — goal, scope (in and out), and the done-defining behaviors are stated or directly implied; no open question a grill would have to settle (users, edge cases, data shapes, error handling); the goal isn't still moving.
+
+Either check failing means the requirement isn't to-spec-ready — decomposing it anyway bakes the guesses into every spec. Hand it back instead: `/grill-me` when the gaps are still open (raw idea), `/to-prd` when the design was discussed but never distilled into a parent.
+
+</completeness-bar>
 
 > Precondition: the issue tracker layout is configured — run `/setup-skills` if not.
 
@@ -18,7 +30,7 @@ A **spec** is the atomic unit of agent coding: the minimal thing an agent implem
 
 ### 1. Gather context
 
-Work from the conversation. If a PRD/bug reference was passed, fetch it and read body + comments; note its issue number for `Parent`.
+Work from the conversation. If a PRD/bug reference was passed, fetch it and read body + comments; note its issue number for `Parent`. If there is **no parent and no grilling happened**, the requirement itself is the source — run the completeness bar first: on pass it plays the grilled-design role for the rest of the process (still no `Parent`); on fail, stop at the hand-back and do not decompose a guessed requirement.
 
 ### 2. Read the terrain before splitting
 
@@ -28,7 +40,7 @@ Work from the conversation. If a PRD/bug reference was passed, fetch it and read
 
 ### 3. Decompose — best-of-N on the breakdown
 
-The decomposition is the highest-leverage decision; a wrong cut propagates into every spec. If there's no PRD/bug parent, synthesise the agreed design first, then decompose that. **Acceptance lives here, not at design time** — each spec's key acceptance behaviors (critical paths) are what make it independently verifiable, so they're part of the cut, not deferred.
+The decomposition is the highest-leverage decision; a wrong cut propagates into every spec. If there's no PRD/bug parent, synthesise the agreed design first (a vetted simple requirement already *is* that design), then decompose that. **Acceptance lives here, not at design time** — each spec's key acceptance behaviors (critical paths) are what make it independently verifiable, so they're part of the cut, not deferred.
 
 > **Best-of-N, file-grounded.** Candidates are drafted to disk, not prompt-fed into chat — the judge reviews grounded files, and losing candidates never enter your context. Drafts live under the feature folder's `.drafts/decompose/` (create the feature folder now if no parent is on disk yet; step 4 reuses it).
 >
@@ -91,7 +103,7 @@ Use the project glossary vocabulary in titles and bodies. Do NOT close or modify
 
 The agent that just designed the specs can't grade its own work. Fan out **two independent fresh-context sub-agents** (`general-purpose`, spawned in one message so they run in parallel) — each gets the landed specs plus **one** input and never the design chat, and returns PASS or specific defects (the spec + the failing line). Splitting along two axes keeps each sub-agent's context focused, because the inputs differ:
 
-- **Sub-agent A — coverage vs. the source.** Input: the landed specs + the parent PRD/bug (or the grilled-design summary if no parent). **Does not read code.** Checks the three coverage axes:
+- **Sub-agent A — coverage vs. the source.** Input: the landed specs + the parent PRD/bug (or the grilled-design summary / vetted requirement if no parent). **Does not read code.** Checks the three coverage axes:
   - **Goal coverage** — every goal / user story in the source maps to at least one spec's `Goal` + `Acceptance criteria`. No goal orphaned; no spec that serves nothing in the source.
   - **Test coverage** — when the source is a PRD, its **Testing Decisions** (what makes a good test, which modules, prior art) are reflected across the specs' acceptance behaviors and test-seam choices.
   - **Scope fidelity** — nothing out-of-scope crept in; nothing in-scope was dropped.

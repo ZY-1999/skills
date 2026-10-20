@@ -31,8 +31,8 @@
 
 - `prd` 与 `bug` 是父项；`spec` 是叶子。
 - 只有 `spec` 会被实现（通过 `/tdd`）。`prd`/`bug` 是规划/分诊产物。
-- 一个 `spec` 带有指向其来源 `prd`/`bug` 的 `Parent:` 引用（来源是一次原始 grilled 对话时省略）。
-- 对于没有现成 `prd` 的 grilled 对话，`/to-spec` 会内联合成设计并直接产出 `spec` —— 不需要 `prd` 产物。
+- 一个 `spec` 带有指向其来源 `prd`/`bug` 的 `Parent:` 引用（来源是一次 grilled 对话或直入的简单完整需求时省略）。
+- 对于没有现成 `prd` 的 grilled 对话，`/to-spec` 会内联合成设计并直接产出 `spec` —— 不需要 `prd` 产物；简单且完整的需求也可经入口完整性门直入 `/to-spec`，不过门则退回 `/grill-me` / `/to-prd`。
 
 issues 以本地 markdown 形式存于 `.scratch/<YYYY-MM-DD>-<feature-slug>/` 下，每个以 `Type:`（`spec | prd | bug`）开头。只有 `spec` 放进 `specs/` 子目录；`prd`/`bug` 作为父项放在与 `specs/` 同级的 feature 根目录。见 [issue-tracker-local.md](./setup-skills/references/issue-tracker-local.md)。
 
@@ -44,7 +44,7 @@ issues 以本地 markdown 形式存于 `.scratch/<YYYY-MM-DD>-<feature-slug>/` �
 
 ## 用户调用（User-invoked）
 
-- **[route](./route/SKILL.md)** —— 意图 → skill 路由器：扫一眼你想做什么，拿到处理它的那一个 skill（或一条短链）。覆盖本 fork 实际解析的全部 skills —— zy/ 的 SDD skills 加上与之互通的 upstream skills。是索引，不是流程叙事；跨段接力决策也在这里体现：已批准 PRD 是否继续 SDD 开发 → `/sdd-flow`，诊断是否转 tracked fix → `/to-prd` → `/sdd-flow`。
+- **[route](./route/SKILL.md)** —— 意图 → skill 路由器：扫一眼你想做什么，拿到处理它的那一个 skill（或一条短链）。覆盖本 fork 实际解析的全部 skills —— zy/ 的 SDD skills 加上与之互通的 upstream skills。是索引，不是流程叙事；跨段接力决策也在这里体现：已批准 PRD 是否继续 SDD 开发 → `/sdd-flow`，诊断是否转 tracked fix → `/to-prd` → `/sdd-flow`，简单且完整的需求是否跳过 grill/PRD 直连 → `/to-spec` → `/tdd`。
 - **[setup-skills](./setup-skills/SKILL.md)** —— 为 SDD skills 配置仓库：本地 markdown issue 追踪器、triage 标签词汇、domain 文档布局，以及一份初始的项目级 CodeMap。`setup-matt-pocock-skills` 的本地-only 改造版（无 GitHub/GitLab）。在其他 SDD skills 之前运行一次。
 - **[improve-architecture](./improve-architecture/SKILL.md)** —— 架构发现：扫描代码库寻找深化机会，以可视化 HTML 报告呈现候选，发布到 issue tracker 的新 feature 文件夹（`.scratch/<YYYY-MM-DD>-architecture-review-<HHmmss>/`）。**只做发现不做设计**（不 propose interfaces，不跑 PRD 综合）：报告是该 feature 文件夹的首个产物；每个 `Strong`/`Worth exploring` 候选（**含 Top recommendation**）直接从报告卡片摘录为 `needs-info` 的轻量 `prd` 草稿，Implementation/Testing Decisions 留空。Top + 与其紧耦合的候选合成 scan 文件夹里的一个草稿，独立候选各自 feature 文件夹；草稿留待后续 grill 完善，是否继续走 SDD 由 `/route` 决定。
 
@@ -52,7 +52,7 @@ issues 以本地 markdown 形式存于 `.scratch/<YYYY-MM-DD>-<feature-slug>/` �
 
 - **[diagnose-bug](./diagnose-bug/SKILL.md)** —— 顽固 bug 与性能回归的纪律化诊断循环：构建反馈循环 → 复现最小化 → 假设 → 插桩锁定根因，交付确认的诊断本身（根因 + 证据 + 最小复现 + 修复方向建议）——不修复、不自动接力 SDD；是否转 tracked fix 走 `/route`。upstream `diagnosing-bugs` 的 zy/ 改造版：保留其 Phase 1-4 诊断纪律，把 Phase 5-6（直接修复+事后）替换为交付诊断。
 - **[to-prd](./to-prd/SKILL.md)** —— 把当前对话综合成父项 issue 并发布到 issue 追踪器 —— 不做访谈，只做综合。按输入性质选模板：feature → `prd`、bug → `bug`、架构深化 → `prd`（用 codebase-design 词汇，`Deepening Goals` 取代 `User Stories`）。upstream `to-prd` 的模型调用改造版（setup 指向 `/setup-skills`），以便被 SDD flow 编排；在本 fork 扩展出 bug 与架构两套模板（见 `references/`）。**发布前由单个 fresh-context sub-agent 做对抗式审查**：先核验真实性（codebase/ADR/glossary 事实陈述是否属实、防幻觉），再判可行性（方向可建、seam 真实、不违 ADR）；3 轮不过则熔断、带草稿交人审。产出供 `/to-spec` 拆解的父项。
-- **[to-spec](./to-spec/SKILL.md)** —— 把一个 PRD、一个 bug、或当前（已 grilled 的）对话拆成 `spec` —— 原子的、**规划完备**的单元，agent 在一次 `/tdd` 会话里实现。拆分方案走 best-of-N + judge；spec 设计基于 `/codebase-design`，复杂到值得时才启用 DESIGN-IT-TWICE。拆分定案后先把 spec 骨架落库（`needs-design`），再逐个设计填充，设计完置 `ready-for-human`（等人审 = Gate A）。每个 spec 自带计划（接口变更、按优先级排列的待测行为、deep-module 备注），所以 `/tdd` 直接从 red-green 开始。替代 upstream `to-issues` 并吸收 upstream `tdd` 的 Planning 步骤。以 `/to-prd` 产出的 `prd`（或一个 bug、或一次 grilled 对话）作为父项输入。位于 `/grill-with-docs`/`/to-prd` 与 `/tdd` 之间。
+- **[to-spec](./to-spec/SKILL.md)** —— 把一个 PRD、一个 bug、当前（已 grilled 的）对话、或一条简单且完整的需求拆成 `spec` —— 原子的、**规划完备**的单元，agent 在一次 `/tdd` 会话里实现。简单完整需求走入口完整性门（completeness-bar）校验，不过门退回 `/grill-me` / `/to-prd`，绝不带猜测拆解。拆分方案走 best-of-N + judge；spec 设计基于 `/codebase-design`，复杂到值得时才启用 DESIGN-IT-TWICE。拆分定案后先把 spec 骨架落库（`needs-design`），再逐个设计填充，设计完置 `ready-for-human`（等人审 = Gate A）。每个 spec 自带计划（接口变更、按优先级排列的待测行为、deep-module 备注），所以 `/tdd` 直接从 red-green 开始。替代 upstream `to-issues` 并吸收 upstream `tdd` 的 Planning 步骤。以 `/to-prd` 产出的 `prd`（或一个 bug、或一次 grilled 对话、或过门的简单完整需求）作为输入。位于 `/grill-with-docs`/`/to-prd` 与 `/tdd` 之间。
 - **[tdd](./tdd/SKILL.md)** —— 用测试先行（red-green-refactor）实现一个规划完备的 spec。纯实现：`/to-spec` 给出的 spec 已带好接口和按优先级排列的行为，所以这个 skill 直接从 tracer bullet 开始 —— 没有 planning 步骤；全部 GREEN 后翻转 spec 状态收尾（`ready-for-agent` → `ready-for-human`）。完全替代 upstream `tdd`（planning 已移到 `/to-spec`）。位于 `/to-spec` 之后。
 - **[review](./review/SKILL.md)** —— 自某个固定点（commit、branch、tag 或 merge-base）对 `HEAD` 之后的 diff 做双轴复核：**Standards**（代码是否遵循仓库文档化的编码规范）与 **Spec**（代码是否忠实实现原始 issue/PRD/spec）。两轴各跑一个 fresh-context `general-purpose` 子代理（互不污染上下文，也看不到产出 diff 的对话），再并排聚合报告，**绝不跨轴合并/重排** —— 一轴通过不能掩盖另一轴失败。`/sdd-flow` 在 Stage 3 调用它（固定点 = Gate A 的 spec 提交，即 build 阶段起点之前），也可被 `/route` 或用户直接触发来复核分支/PR/WIP 改动。需要 `/setup-skills` 已配置 issue tracker。
 - **[codemap](./codemap/SKILL.md)** —— 生成、更新或 drift-check agent 可读的 CodeMaps：渐进式代码地形索引，能把 agent 引到带源码链接的证据，而不必加载整个仓库。项目级（广度优先）或特性级（深度优先）地图，位于 `docs/codemap/`。喂给 `/to-spec` 的 "reduce chaos" 步骤，以及任何需要先看地形的 skill。改编自 `sdd-riper`。

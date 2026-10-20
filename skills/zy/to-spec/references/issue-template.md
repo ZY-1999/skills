@@ -2,7 +2,7 @@
 
 Type: spec
 Status: needs-design # → ready-for-human once step 5 design is filled in (awaiting Gate A review)
-Parent: #<prd-or-bug-issue-number> # omit if the source was a grilled conversation
+Parent: #<prd-or-bug-issue-number> # omit if the source was a grilled conversation or a vetted simple requirement
 Blocked by: #<n> # or "None — can start immediately"
 
 ## Goal

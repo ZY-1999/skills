@@ -1,46 +1,36 @@
 ---
 name: tdd
-description: Implement a planning-complete spec test-first (red-green-refactor). Use after /to-spec has produced a spec — the spec already carries the interface and the prioritized behaviors to test, so this skill starts straight at the tracer bullet.
+description: Implement a planning-complete spec scenario-first — use after /to-spec has produced a spec plus the feature's contracts.md and trace.md. The tests come from the P0 scenarios in trace.md (requirement-side, not implementer-invented) — materialize one as a real failing e2e/interface test, drive it green with a tracer bullet, refactor, repeat. Unit tests are discretionary tooling, not the discipline.
 ---
 
 # TDD: Implement a Spec
 
-The **planning is already done** — `/to-spec` produced a planning-complete spec (design, acceptance criteria, scope, context, rework path). This skill is the implementation half: take that spec and turn it into code, test-first.
+The **planning is already done** — `/to-spec` produced a planning-complete spec (AC projection, contract references, scope, context, rework path) plus the feature's `contracts.md` and `trace.md`. This skill is the implementation half: turn the spec's scenarios into code, **scenario-first**.
 
 If no spec is in hand, run `/to-spec` first.
 
 ## Philosophy
 
-**Core principle**: Tests should verify behavior through public interfaces, not implementation details. Code can change entirely; tests shouldn't.
+**The tests are not yours to invent.** The feature's P0 scenarios (`S-NN` rows in `trace.md`) were derived from the approved PRD's acceptance criteria before any code existed — they are the requirement side of the double anchor. Materializing them test-first is the anti-cheat gate: a scenario that runs red before its implementation exists is a test that actually tests something. An implementer who writes the code first and the tests after tends to write tests that bless the code.
 
-**Good tests** are integration-style: they exercise real code paths through public APIs. They describe _what_ the system does, not _how_ it does it. A good test reads like a specification — "user can checkout with valid cart" tells you exactly what capability exists. These tests survive refactors because they don't care about internal structure.
+**Good scenario tests** exercise real code paths through the contract points (`C-NN` from `contracts.md`) — the public interface. They read like the requirement: "user at limit re-receives → 403 COUPON_LIMIT_EXCEEDED". They survive refactors because they don't care about internal structure.
 
-**Bad tests** are coupled to implementation. They mock internal collaborators, test private methods, or verify through external means (like querying a database directly instead of using the interface). The warning sign: your test breaks when you refactor, but behavior hasn't changed.
+**Unit tests are discretionary.** Use them when they help — pinning down a tricky edge while debugging, guarding an invariant the scenario suite doesn't see, characterizing legacy behavior before touching it. They are tooling, not the discipline; nothing gates on them. This is `/codebase-design`'s **"interface is the test surface"** principle: wanting to test _past_ the interface is a signal the module is the wrong shape — fix the interface, don't paper over it with a mock.
 
-This is `/codebase-design`'s **"interface is the test surface"** principle: wanting to test _past_ the interface is a signal the module is the wrong shape — fix the interface, don't paper over it with a mock. The testability rules below operationalize it (and hold whether or not `/codebase-design` is loaded).
+## Anti-Pattern: Dumping the Suite
 
-## Anti-Pattern: Horizontal Slices
+**DO NOT materialize every scenario test first, then implement everything.** That's horizontal slicing at the scenario level: bulk-written tests outrun your understanding, and the first GREEN proves nothing about the architecture path.
 
-**DO NOT write all tests first, then all implementation.** This is "horizontal slicing" — treating RED as "write all tests" and GREEN as "write all code."
-
-This produces **crap tests**:
-
-- Tests written in bulk test _imagined_ behavior, not _actual_ behavior
-- You end up testing the _shape_ of things (data structures, function signatures) rather than user-facing behavior
-- Tests become insensitive to real changes — they pass when behavior breaks, fail when behavior is fine
-- You outrun your headlights, committing to test structure before understanding the implementation
-
-**Correct approach**: Vertical slices via tracer bullets. One test → one implementation → repeat. Each test responds to what you learned from the previous cycle.
+**Correct approach**: vertical, one scenario at a time — materialize → red → tracer-bullet green → refactor → next. The full P0 suite being green is a **feature-level** property (checked by `/sdd-flow` at Stage 3), accumulated across specs — never a per-session dump.
 
 ```
 WRONG (horizontal):
-  RED:   test1, test2, test3, test4, test5
-  GREEN: impl1, impl2, impl3, impl4, impl5
+  RED:   S-01, S-02, S-03, S-04 all written
+  GREEN: impl everything
 
 RIGHT (vertical):
-  RED→GREEN: test1→impl1
-  RED→GREEN: test2→impl2
-  RED→GREEN: test3→impl3
+  S-01 → red → green → refactor
+  S-02 → red → green → refactor
   ...
 ```
 
@@ -48,70 +38,72 @@ RIGHT (vertical):
 
 Read the [Git Contract](docs/agents/git-contract.md) branch strategy. If the active mode is feature-branch, confirm you're on the right branch (idempotent — don't re-create it each spec); if solo, there's nothing to do.
 
+Read the spec's **Acceptance criteria** (the AC projection), the feature's `contracts.md`, and the `trace.md` rows whose `Spec` column names this spec — those rows are your work list.
+
 ## Workflow
 
-The spec's **Acceptance criteria** is your test list; the **Design**'s _Interface delta_ is the public surface you test through. Work the behaviors in the spec's priority order, and honor **Scope** — don't touch what's listed Out.
+The spec's **AC projection** tells you which scenarios you own; the **Design**'s _Contract references_ are the public surface you test through. Honor **Scope** — don't touch what's listed Out.
 
 **Design testable code as you go.** As you write each piece of minimal code, shape it for testability per `/codebase-design`'s three rules: **accept dependencies, don't create them**; **return results, don't produce side effects**; **keep the surface small**. Tests then fall out naturally instead of needing mocks. When `/codebase-design` isn't loaded, those three phrases are enough to apply.
 
-### 1. Tracer Bullet
+### 1. Materialize the first scenario (RED)
 
-Write ONE test that confirms ONE thing about the system (start with the spec's top-priority critical path):
+Take the spec's top-priority scenario (`S-NN` from `trace.md`) and write it as a **real e2e/interface-level test** in the repo's test suite — the one-line sequence from the trace row expanded into the test's Given/When/Then, asserting through the contract points (`C-NN`), checking exactly the error codes / fields / numbers `contracts.md` specifies. Run it → **it must fail**. If it passes before any implementation, the test is wired wrong (or the behavior already exists) — stop and find out which.
+
+Never weaken an assertion to make GREEN easier: the numbers and codes come from `contracts.md`, and changing them is a contract change, not a testing convenience.
+
+### 2. Tracer bullet (first GREEN)
+
+Write the minimal vertical path — entry to storage — that makes that one scenario pass. This proves the path works end-to-end before you invest in breadth.
+
+### 3. Incremental loop
+
+For each remaining scenario the spec owns, in priority order:
 
 ```
-RED:   Write test for first behavior → test fails
-GREEN: Write minimal code to pass → test passes
-```
-
-This is your tracer bullet — proves the path works end-to-end.
-
-### 2. Incremental Loop
-
-For each remaining behavior, in priority order:
-
-```
-RED:   Write next test → fails
-GREEN: Minimal code to pass → passes
+RED:   materialize next scenario test → fails
+GREEN: minimal code to pass → passes
 ```
 
 Rules:
 
-- One test at a time
-- Only enough code to pass current test
-- Don't anticipate future tests
-- Keep tests focused on observable behavior
+- One scenario at a time
+- Only enough code to pass the current scenario
+- Don't anticipate future scenarios
+- Add discretionary unit tests when they genuinely help (debugging, edges, invariants) — clearly as support, never as a substitute for a P0 scenario the spec owes
 
-### 3. Refactor
+### 4. Refactor
 
-After all tests pass, look for refactor candidates:
+After each GREEN, look for refactor candidates:
 
 - [ ] Extract duplication
 - [ ] **Deepen modules** — via `/codebase-design`'s **DEEPENING** pattern; the spec's **Design** may have flagged deep-module opportunities
 - [ ] **Check seam and depth on what you built** — deletion test (delete it; complexity vanishing means a pass-through) and one-vs-two-adapters (one adapter = a hypothetical seam, drop it). See `/codebase-design`.
 - [ ] Apply SOLID principles where natural
 - [ ] Consider what new code reveals about existing code
-- [ ] Run tests after each refactor step
+- [ ] Run the scenario suite after each refactor step
 
-**Never refactor while RED.** Get to GREEN first. If a cycle stays RED after honest minimal effort, fall back to the spec's **Rework on failure** point rather than forcing code to fit.
+**Never refactor while RED.** Get to GREEN first. If a scenario stays RED after honest minimal effort, the design is wrong somewhere — fall back to the spec's **Rework on failure** point rather than forcing code to fit. If what you discovered is a contract-level wrongness (the number in `contracts.md` can't be right), stop and surface it — that's `/spec-sync` territory, not something to code around.
 
-### 4. Maintain the codemap
+### 5. Maintain the codemap
 
 If `/codemap` is loaded and the spec touched an area a `docs/codemap/` map covers, run `/codemap` **drift-check** against that map once the implementation is GREEN — if it reports drift, update the affected map. Skip when `/codemap` isn't loaded or no map covers the area. Do this before closing the spec, so the map stays current with the code.
 
-### 5. Close the spec
+### 6. Close the spec
 
-With every behavior in the spec's **Acceptance criteria** GREEN, refactor done, and the codemap current:
+With every scenario the spec owns GREEN, refactor done, and the codemap current:
 
-1. **Flip** the spec file's `Status: ready-for-agent` → `ready-for-human` (or `closed`, per the tracker) so triage and the next stage know it's implemented.
-2. **Append an evidence comment** to the spec file (below `## Rework on failure`; format documented in `/to-spec`'s issue template) — for each acceptance criterion, the test that proves it (file + name), the test command and pass/fail tally, and the commit from step 2. Pointers only — no narration, no source pasting (same stale-proof rule codemaps use). Stage this edit with the next commit, or amend it into step 2's if not yet pushed.
-3. **Commit** the work — code plus the status flip. For what to stage, message conventions, and whether to commit, follow the [Git Contract](docs/agents/git-contract.md).
+1. **Flip** the spec file's `Status: ready-for-agent` → `implemented` — no human confirmation is owed at this point; Stage 3's review and the trace gate are the backstop.
+2. **Append an evidence comment** to the spec file (below `## Rework on failure`; format documented in `/to-spec`'s issue template) — for each AC-projection line, the scenario test that proves it (file + name), the suite command and pass/fail tally, and the commit from step 3. Pointers only — no narration, no source pasting (same stale-proof rule codemaps use).
+3. **Backfill `trace.md`** — for every row this spec owns: `Test` = `file::test name`, `Commit` = the implementing sha, `Status` = `done`. Stage this edit with the next commit, or amend it into step 4's if not yet pushed.
+4. **Commit** the work — code plus the status flip. For what to stage, message conventions, and whether to commit, follow the [Git Contract](docs/agents/git-contract.md).
 
 ## Checklist Per Cycle
 
 ```
-[ ] Test describes behavior, not implementation
-[ ] Test uses public interface only
-[ ] Test would survive internal refactor
-[ ] Code is minimal for this test
+[ ] Scenario came from trace.md, not from reading my own code
+[ ] Test went RED before its implementation existed
+[ ] Test asserts through contract points (codes/fields/numbers per contracts.md)
+[ ] Code is minimal for this scenario
 [ ] No speculative features added
 ```

@@ -41,6 +41,8 @@ The shape of the fix at module/seam level — what should change in which interf
 
 How the fix gets verified and how the bug is kept from regressing. This block is also the **done-definition** for the bug — a fix counts as done only when the checklist below holds, and the bug is not closed without it.
 
+When `/to-spec` decomposes this bug, the Expected Behavior above gets numbered as `AC-<n>-<NN>` acceptance criteria (P0 — a bug's expected behavior is always must-ship) so `trace.md` can gate on it like any feature.
+
 What the regression test looks like:
 
 - Test external behavior through the right seam (the one the diagnosis identified)

@@ -10,10 +10,14 @@ Issues for this repo live as markdown files in `.scratch/`. An **issue is the ca
   ```
   .scratch/2026-06-18-login-redirect/
   ├── 01-fix-login-redirect-loop.md   # prd or bug — the parent
+  ├── contracts.md                    # technical truth source — C-NN contract points (added by /to-spec)
+  ├── trace.md                        # traceability matrix — AC→scenario→contract→spec→test→commit (added by /to-spec)
   └── specs/
       ├── 01-validate-token.md         # spec
       └── 02-refresh-flow.md           # spec
   ```
+
+- `contracts.md` and `trace.md` are **feature-level artifacts**, not issues: `/to-spec` creates them when decomposing (double-anchor translation of the PRD's ACs), `/tdd` backfills trace rows on close, `/spec-sync` ripples them on change, `/spec-check` audits them. A feature folder without them is simply not decomposed yet.
 
 - Files are numbered `<NN>` from `01` within their folder. Number `specs/` in dependency order so `Blocked by: #<n>` resolves to a sibling spec; `Parent: #<n>` points at the feature-root parent.
 - Each issue opens with a `Type:` line (`spec` / `prd` / `bug`), a `Status:` line (see `triage-labels.md`), and a `## Comments` section appended at the bottom.

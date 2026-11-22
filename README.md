@@ -2,7 +2,16 @@
 
 本仓库 fork 自 [mattpocock/skills](https://github.com/mattpocock/skills)，**保留其全部 skill 文件原样**（便于持续从 `origin/main` 合并），并在此基础上新增了 [`zy/`](./skills/zy/) 一桶 skill，围绕 **Spec-Driven Development（SDD）** 流程做扩展与本地化改造。
 
-这些 skill 的核心理念承袭自 matt：开工前用 grilling 对齐需求、用共享语言（`CONTEXT.md` + ADR）降低冗长、用 red-green-refactor 的反馈循环保证代码可运行、并持续投资代码架构。本 fork 在此之上补齐了一条 **grill → prd → spec → tdd → review → maintain** 的完整 SDD 流水线。
+这些 skill 的核心理念承袭自 matt：开工前用 grilling 对齐需求、用共享语言（`CONTEXT.md` + ADR）降低冗长、用测试先行的反馈循环保证代码可运行、并持续投资代码架构。本 fork 在此之上补齐了一条完整 SDD 流水线，文档分四层（参考 mumu-spec 的分层与对齐思想，裁剪为个人可用的体量）：
+
+```
+PRD（纯需求：AC 编号 + P0/P1）
+  └─ contracts.md（技术契约真源：C-NN 端点/错误码/字段）      ← /to-spec 双锚对齐产出
+      └─ specs/（执行切片：AC 投影 + 契约引用 + 增量设计）
+          └─ trace.md（追溯矩阵：AC→场景→契约→spec→test→commit）
+```
+
+流程：**grill → prd → [Gate 0 卡] → align(contracts+trace) → specs → [Gate A 卡] → tdd(场景驱动) → review+追溯门禁 → maintain**；人只在两道门各看一张一屏卡片并抽查一个最高风险 spec，`/tdd` 收尾免逐条确认。需求变更走 `/spec-sync` 联动下游，`/spec-check` 四维质检 + 看板兜底。
 
 ## 与 upstream 的关系
 
@@ -70,19 +79,21 @@ claude plugin install zy-skills@zy-skills
 
 ### 本 fork 新增（zy/）
 
-围绕 SDD 流水线新增，12 个；每个都可在 [skills/zy/README.md](./skills/zy/README.md) 查看完整说明。
+围绕 SDD 流水线新增，14 个；每个都可在 [skills/zy/README.md](./skills/zy/README.md) 查看完整说明。
 
 - **[route](./skills/zy/route/SKILL.md)** — 意图 → skill 路由器：扫一眼你想做什么，拿到处理它的那一个 skill（或一条短链）。`（用户调用）`
 - **[setup-skills](./skills/zy/setup-skills/SKILL.md)** — 为 SDD skills 配置仓库（本地 markdown issue 追踪器、triage 标签、domain 文档、初始 CodeMap）；`setup-matt-pocock-skills` 的本地-only 改造版。`（用户调用）`
 - **[improve-architecture](./skills/zy/improve-architecture/SKILL.md)** — 扫描代码库寻找架构深化机会，以可视化 HTML 报告呈现候选并发布到 issue tracker；**只做发现不做设计**（不跑 PRD 综合），每个候选（含 Top recommendation）直接作为 `needs-info` 轻量草稿落 issue tracker，留待后续 grill 完善。`（用户调用）`
 - **[diagnose-bug](./skills/zy/diagnose-bug/SKILL.md)** — 顽固 bug 与性能回归的纪律化诊断循环：构建反馈循环 → 复现最小化 → 假设 → 插桩锁定根因，交付确认的诊断本身（不修复、不自动接力）。`（模型调用）`
-- **[to-prd](./skills/zy/to-prd/SKILL.md)** — 把当前对话综合成父项 issue 并发布到 issue 追踪器（不访谈，只综合）：feature → `prd`、bug → `bug`、架构深化 → `prd`（architecture 模板）。`（模型调用）`
-- **[to-spec](./skills/zy/to-spec/SKILL.md)** — 把 PRD / bug / 已 grilled 对话拆成 `spec`：原子、规划完备的单元，一个 spec = 一次 `/tdd` 会话。`（模型调用）`
-- **[tdd](./skills/zy/tdd/SKILL.md)** — 用 red-green-refactor 实现一个规划完备的 spec（纯实现，无 planning 步骤）。`（模型调用）`
-- **[review](./skills/zy/review/SKILL.md)** — 自某个固定点（commit/branch/tag/merge-base）对 diff 做双轴复核：Standards（是否遵循仓库编码规范）+ Spec（是否忠实实现原始 issue/PRD）；两轴并行 fresh-context 子代理跑，分轴并排报告、不跨轴合并。v1.0.2 起 agent 的 `git commit` 被插件门禁拦截后，也由它复核未提交变更并无硬性违规时放行。`（模型调用）`
+- **[to-prd](./skills/zy/to-prd/SKILL.md)** — 把当前对话综合成父项 issue 并发布到 issue 追踪器（不访谈，只综合）：feature → `prd`（纯需求文档，AC 编号 + P0/P1）、bug → `bug`、架构深化 → `prd`（architecture 模板）。`（模型调用）`
+- **[to-spec](./skills/zy/to-spec/SKILL.md)** — 把 PRD / bug / 已 grilled 对话翻译并拆解：先把 AC 双锚对齐成 `contracts.md`（技术契约真源）并播种 `trace.md` 场景矩阵，再 best-of-N 拆成 `spec`（AC 投影 + 契约引用）；一个 spec = 一次 `/tdd` 会话。`（模型调用）`
+- **[tdd](./skills/zy/tdd/SKILL.md)** — 场景驱动实现一个规划完备的 spec：测试来自 `trace.md` 的 P0 场景（需求侧产物，非实现者自造）——逐场景 red → tracer-bullet green → 重构；切片内单测自由裁量；收尾免逐条确认，回填 trace。`（模型调用）`
+- **[review](./skills/zy/review/SKILL.md)** — 自某个固定点（commit/branch/tag/merge-base）对 diff 做双轴复核：Standards（是否遵循仓库编码规范）+ Spec（是否忠实实现 spec，以 `contracts.md`/`trace.md` 为接口与覆盖真源）；两轴并行 fresh-context 子代理跑，分轴并排报告、不跨轴合并。v1.0.2 起 agent 的 `git commit` 被插件门禁拦截后，也由它复核未提交变更并无硬性违规时放行。`（模型调用）`
+- **[spec-sync](./skills/zy/spec-sync/SKILL.md)** — 变更联动：需求或契约改动时，以 `contracts.md` 为中心列出全部需联动的下游（AC/场景/spec/测试/trace 行），确认后一并更新并重跑双锚互校。`（模型调用）`
+- **[spec-check](./skills/zy/spec-check/SKILL.md)** — 四维质检 + 状态看板：完整性/一致性/追溯性/分层纯度，P0/P1 分级报告；fresh-context 子代理只读审计。`（模型调用）`
 - **[codemap](./skills/zy/codemap/SKILL.md)** — 生成、更新或 drift-check agent 可读的 CodeMap（渐进式代码地形索引）。`（模型调用）`
-- **[idea-to-prd](./skills/zy/idea-to-prd/SKILL.md)** — SDD 流水线前半段：从想法/需求出发，grill 对齐设计 → 综合 PRD → 人审 Gate 0，止于已批准的 PRD；是否接力 `/sdd-flow` 走 SDD 开发由 `/route` 决定。只负责 grill + PRD + Gate 0，不碰 git。`（模型调用）`
-- **[sdd-flow](./skills/zy/sdd-flow/SKILL.md)** — SDD 流水线后半段：从已批准的 PRD 到交付（spec → build → review → maintain）。入口把 PRD 翻转为 `ready-for-agent`，然后 `/to-spec` 拆解、`/tdd` 逐个实现、`/review` 复核、维护文档；spec 质量归 `/to-spec`。承接已批准的 PRD（Gate 0 后）或手写 PRD。`（模型调用）`
+- **[idea-to-prd](./skills/zy/idea-to-prd/SKILL.md)** — SDD 流水线前半段：从想法/需求出发，grill 对齐设计 → 综合 PRD → 人审 Gate 0（一屏卡片：P0 AC + 范围外 + 关键取舍），止于已批准的 PRD；是否接力 `/sdd-flow` 走 SDD 开发由 `/route` 决定。只负责 grill + PRD + Gate 0，不碰 git。`（模型调用）`
+- **[sdd-flow](./skills/zy/sdd-flow/SKILL.md)** — SDD 流水线后半段：从已批准的 PRD 到交付。入口把 PRD 翻转为 `ready-for-agent`，然后 `/to-spec` 对齐拆解 → Gate A（一屏对齐卡 + 抽查一个最高风险 spec）→ `/tdd` 逐个场景驱动实现 → `/review` + 追溯门禁（全 P0 场景绿）→ 维护文档收尾。承接已批准的 PRD（Gate 0 后）或手写 PRD。`（模型调用）`
 - **[handoff](./skills/zy/handoff/SKILL.md)** — 把当前对话压缩成 OS 临时目录的 handoff 文件，并输出一条可直接粘贴的下个会话启动 prompt（「请阅读文件 <path> 然后继续 <action>」）。`（模型调用）`
 
 ### 其它

@@ -16,12 +16,12 @@ idea → grill → prd → [Gate 0] → done (approved PRD on disk)
 
 **Invocation contract.** Every stage uses model-invoked skills, so this skill chains automatically: grilling = `/grilling` + `/domain-modeling`, then `/to-prd`. On Gate 0 approval it stops — the approved PRD is the deliverable. Continuing into SDD (`/sdd-flow`) is never an automatic hand-off; it is a user-routed next move (`/route`).
 
-## Human gate — review the file, not the chat
+## Human gate — a one-screen card, with the file as ground truth
 
-Gate 0 fires **after** Stage 2 has already published the PRD to the issue tracker — the PRD is a real file on disk before the gate runs. So:
+Gate 0 fires **after** Stage 2 has already published the PRD to the issue tracker — the PRD is a real file on disk before the gate runs. The human reviews a **Gate 0 card** (one screen), not the full document:
 
-- **Don't re-paste or summarize the PRD in chat.** Chat coordinates; the file is the ground truth.
-- **Point the user at the PRD file** — give the exact path; the user reviews the landed file in their editor.
+- **Present the card in chat** — P0 acceptance criteria (id + one line each), Out of Scope, and the few key trade-offs the grill settled. The card is the review surface; deep-reading the PRD is optional.
+- **Point the user at the PRD file** — give the exact path; it remains the ground truth and the place to edit.
 - **In-file edits count as approved feedback** — fold them in.
 - Then ask the gate question and wait.
 
@@ -34,7 +34,7 @@ Never run the gate against chat-only content — if the PRD isn't on disk yet, p
 Detect which of two inputs you have:
 
 1. **Raw idea / requirement** (default) — the conversation carries an idea, no PRD on disk yet. Grill the full design (Stage 1) → synthesise a fresh PRD (Stage 2).
-2. **An incomplete PRD draft on disk** — typically a `needs-info` PRD left by `/improve-architecture` (empty Implementation / Testing Decisions, or thin Deepening Goals). Don't grill from scratch or re-synthesise — read the draft, grill **only** its gaps (Stage 1 alt), then update the draft in place (Stage 2 alt).
+2. **An incomplete PRD draft on disk** — typically a `needs-info` PRD left by `/improve-architecture` (missing acceptance criteria or P0 marks, thin Problem Statement, or thin Deepening Goals for architecture drafts). Don't grill from scratch or re-synthesise — read the draft, grill **only** its gaps (Stage 1 alt), then update the draft in place (Stage 2 alt).
 
 If the user points at a PRD file whose status is `needs-info` or whose required sections are incomplete, that's mode 2. If in doubt, ask. Both modes converge on the same Gate 0.
 
@@ -46,7 +46,7 @@ Run a `/grilling` session, using the `/domain-modeling` skill — interview the 
 
 If the user arrives already-grilled (the conversation carries a resolved design), skip ahead to Stage 2. Don't skip otherwise — Stage 2 consumes this shared understanding.
 
-**Mode 2 alt — grill the gaps, not the whole design.** Skip the full interview. Read the draft, list which required sections are empty or thin (Implementation Decisions, Testing Decisions, vague Deepening Goals, …), and grill the user one question at a time **only** on those gaps — updating the draft inline as each closes. The settled parts of the design stay settled; you're completing a PRD, not re-exploring it.
+**Mode 2 alt — grill the gaps, not the whole design.** Skip the full interview. Read the draft, list which required sections are empty or thin (missing or unnumbered acceptance criteria, unmarked priorities, vague Problem Statement, thin Deepening Goals on architecture drafts, …), and grill the user one question at a time **only** on those gaps — updating the draft inline as each closes. The settled parts of the design stay settled; you're completing a PRD, not re-exploring it.
 
 ### 2. PRD — `/to-prd`
 
@@ -56,7 +56,14 @@ Synthesize the PRD from the grilled context (no interview — `/to-prd` forbids 
 
 ### Gate 0 — human reviews the PRD
 
-The PRD is already on disk (Stage 2 published it). Point the user at that file and have them review it directly — don't re-paste it in chat. Ask exactly: **"PRD looks good → approve? Or redo the PRD?"**
+The PRD is already on disk (Stage 2 published it). Present the **Gate 0 card** — one screen:
+
+- **P0 acceptance criteria** — id + one line each (skip P1s unless the user asks)
+- **Out of Scope** — the boundaries, one line each
+- **Key trade-offs** — the handful of decisions the grill settled (only the ones a human might overturn)
+- **PRD path** — for optional deep review
+
+Ask exactly: **"PRD looks good → approve? Or redo the PRD?"**
 
 - **Redo** → back to Stage 2, feeding the user's feedback into the next draft.
 - **Approve** → done. The approved PRD on disk is this skill's deliverable — tell the user where it is, and that the next move is theirs (route: `/sdd-flow` to continue into SDD).
